@@ -2,7 +2,7 @@ from .base import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-from .production import ON_DOMAIN
+ON_DOMAIN = True
 
 from .dev import DATABASES
 # Absolute filesystem path to the directory that will hold user-uploaded files.
