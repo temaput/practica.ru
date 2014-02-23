@@ -2,12 +2,8 @@ from .base import *
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+ON_DOMAIN = True
 
-import os
-DOMAIN = 'granatbooks.ru'
-DOMAINPATH = os.path.join(
-        os.path.expanduser('~'), 'domains/{domain}'.format(domain=DOMAIN))
-ondomain = lambda x: os.path.join(DOMAINPATH, x)
 
 DATABASES = {
     'default': {

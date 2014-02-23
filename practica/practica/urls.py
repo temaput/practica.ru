@@ -50,7 +50,7 @@ if 'rosetta' in settings.INSTALLED_APPS:
 
 
 
-if settings.DEBUG:
+if not settings.ON_DOMAIN:
     # Server statics and uploaded media
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)

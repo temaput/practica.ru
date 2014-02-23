@@ -4,6 +4,12 @@ import os
 from os.path import join, realpath, pardir, dirname
 
 
+DOMAIN = 'granat-site.myjino.ru'
+DOMAINPATH = join(
+        os.path.expanduser('~'), 'domains/{domain}'.format(domain=DOMAIN))
+ondomain = lambda x: os.path.join(DOMAINPATH, x)
+ON_DOMAIN = False
+
 from django.core.exceptions import ImproperlyConfigured
 def get_env(name):
     try:
