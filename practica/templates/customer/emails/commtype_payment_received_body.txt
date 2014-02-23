@@ -1,0 +1,13 @@
+{% extends "customer/emails/base.txt" %}
+{% load currency_filters i18n %}
+
+{% block body %}
+{% trans 'Hello,' %}
+
+От Вас поступил платеж на сумму {{ amount_debited|currency }}
+{% if source_type %}
+Способ оплаты: {{source_type.name}}
+{% endif %}
+Благодарим за оплату.
+{% endblock %}
+

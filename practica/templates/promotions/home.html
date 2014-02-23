@@ -1,0 +1,24 @@
+{% extends "layout_2_col.html" %}
+{% load url from future %}
+{% load category_tags %}
+{% load i18n %}
+
+{% block navigation %}
+    {% include "partials/nav_primary.html" %}
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block column_left %}
+{% endblock %}
+
+{% block content %}
+{% category_tree depth=2 as tree_categories %}
+    {% for tree_category, info in tree_categories %}
+        <div class="span{% if forloop.first %}5{% else %}4{% endif %}">
+            <h1>
+                <a href="{{ tree_category.get_absolute_url }}">{{ tree_category.name }}</a>
+            </h1>
+        </div>
+    {% endfor %}
+{% endblock content %}

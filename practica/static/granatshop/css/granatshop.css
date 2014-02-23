@@ -1,0 +1,18 @@
+.footer_links {
+    margin-top: 20px;
+    padding-left: 25%;
+}
+.footer_links >li {
+    list-style: none;
+    display: inline-block;
+    margin-left: 10px;
+    padding: 0 0 0 10px;
+    border-left: 1px solid #cccccc;
+}
+.footer_links > li:first-child {
+    border-left: 0;
+    margin-left: 0;
+}
+.basket-mini .dropdown-menu {
+  width: 550px;
+}

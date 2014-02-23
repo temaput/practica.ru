@@ -1,0 +1,12 @@
+{% extends "customer/emails/base.html" %}
+{% load currency_filters i18n %}
+
+{% block body %}
+<p xmlns="http://www.w3.org/1999/html">{% trans 'Hello,' %}</p>
+
+<p>От Вас поступил платеж на сумму {{ amount_debited|currency }}</p>
+{% if source_type %}
+<p>Способ оплаты: {{source_type.name}}</p>
+{% endif %}
+<p>Благодарим за оплату.</p>
+{% endblock %}

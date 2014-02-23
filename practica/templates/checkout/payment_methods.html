@@ -1,0 +1,50 @@
+{% extends "checkout/checkout.html" %}
+
+{% load url from future %}
+
+{% load currency_filters %}
+{% load i18n %}
+
+{% block title %}
+{% trans "Payment method" %} | {{ block.super }}
+{% endblock %}
+
+{% block checkout_nav %}
+    {% include 'checkout/nav.html' with step=3 %}
+{% endblock %}
+
+{% block order_contents %}{% endblock %}
+{% block shipping_address %}{% endblock %}
+{% block shipping_method %}{% endblock %}
+
+{% block payment_method %}
+<div class="sub-header">
+    <h2>{% trans "Choose a payment method" %}</h2>
+</div>
+<div class="basket-title">
+    <div class="row-fluid">
+        <h4 class="span9">Способ оплаты</h4>
+    </div>
+</div>
+{% for method in methods %}
+<div class="basket-items">
+    <div class="row-fluid">
+        <div class="span9">
+            <h4>{{ method.name }}</h4>
+            {% if method.description %}
+                <p>{{ method.description|safe }}</p>
+            {% endif %}
+        </div>
+        <div class="span1">
+        </div>
+        <div class="span2">
+            <form method="post" action="{% url 'checkout:payment-method' %}">
+                {% csrf_token %}
+                <input type="hidden" name="method_code" value="{{ method.code }}" class="btn" />
+                <button type="submit" class="btn btn-large btn-primary pull-right">{% trans "Select option" %}</button>
+            </form>
+        </div>    
+    </div>
+</div>
+{% endfor %}
+{% endblock payment_method %}
