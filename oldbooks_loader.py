@@ -64,7 +64,7 @@ def main(books):
                         )
                 sr.save()
                 for code in attr_codes:
-                    if code in book:
+                    if code in book and book[code]:
                         attribute = ProductAttribute.objects.get(code=code)
                         _type = attribute.type
                         value = book[code]
