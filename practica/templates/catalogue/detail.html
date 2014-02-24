@@ -148,6 +148,18 @@
         </div>
     {% endblock %}
 
+    {% if product.fragments.all %}
+        <div class="sub-header">
+            <h2>Фрагменты издания</h2>
+        </div>
+        <ul class="row-fluid">
+            {% for fragment in product.fragments.all %}
+            <li >
+                <a href="{{ fragment.original.url }}">{{fragment.caption}}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
     {% iffeature "reviews" %}
         {% block product_review %}

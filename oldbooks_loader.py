@@ -59,6 +59,7 @@ def main(books):
                         partner=practica,
                         price_excl_tax=D(book.get('price', 0)),
                         product=newbook,
+                        num_in_stock = 1000,
                         partner_sku=upc
                         )
                 sr.save()

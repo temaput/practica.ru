@@ -16,23 +16,6 @@ class ProductForm(forms.ProductForm):
 class ProductFragmentForm(django_forms.ModelForm):
     class Meta:
         model = ProductFragment
-        exclude = ('display_order',)
-    
-    def save(self, *args, **kwargs):
-        # We infer the display order of the image based on the order of the
-        # image fields within the formset.
-        kwargs['commit'] = False
-        obj = super(ProductFragmentForm, self).save(*args, **kwargs)
-        obj.display_order = self.get_display_order()
-        obj.save()
-        return obj
 
-    def get_display_order(self):
-        return self.prefix.split('-').pop()
-
-BaseProductFragmentFormSet = inlineformset_factory(
-    Product, ProductFragment, form=ProductFragmentForm, extra=2)
-
-class ProductFragmentFormSet(BaseProductFragmentFormSet):
-    def __init__(self, product_class, user, *args, **kwargs):
-        super(ProductFragmentFormSet, self).__init__(*args, **kwargs)
+ProductFragmentFormSet = inlineformset_factory(
+    Product, ProductFragment, form=ProductFragmentForm, extra=5)

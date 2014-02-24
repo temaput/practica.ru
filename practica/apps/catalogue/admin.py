@@ -17,6 +17,7 @@ ProductCategory = get_model('catalogue', 'ProductCategory')
 ProductClass = get_model('catalogue', 'ProductClass')
 ProductImage = get_model('catalogue', 'ProductImage')
 ProductRecommendation = get_model('catalogue', 'ProductRecommendation')
+ProductFragment = get_model('catalogue', 'ProductFragment')
 
 
 class AttributeInline(admin.TabularInline):
@@ -101,5 +102,6 @@ admin.site.register(AttributeEntity, AttributeEntityAdmin)
 admin.site.register(AttributeEntityType)
 admin.site.register(Option, OptionAdmin)
 admin.site.register(ProductImage)
+admin.site.register(ProductFragment)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(ProductCategory)
