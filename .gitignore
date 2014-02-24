@@ -7,4 +7,4 @@ db.*
 *.swp
 *.json
 practica/media/
-
+practica/manage.py
