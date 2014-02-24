@@ -8,6 +8,20 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding model 'ProductFragment'
+        db.create_table(u'catalogue_productfragment', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('product', self.gf('django.db.models.fields.related.ForeignKey')(related_name='fragments', to=orm['catalogue.Product'])),
+            ('original', self.gf('django.db.models.fields.files.FileField')(max_length=255)),
+            ('caption', self.gf('django.db.models.fields.CharField')(max_length=200, null=True, blank=True)),
+            ('display_order', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
+            ('date_created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+        ))
+        db.send_create_signal(u'catalogue', ['ProductFragment'])
+
+        # Adding unique constraint on 'ProductFragment', fields ['product', 'display_order']
+        db.create_unique(u'catalogue_productfragment', ['product_id', 'display_order'])
+
         # Adding field 'Product.authors'
         db.add_column(u'catalogue_product', 'authors',
                       self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True),
@@ -20,6 +34,12 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        # Removing unique constraint on 'ProductFragment', fields ['product', 'display_order']
+        db.delete_unique(u'catalogue_productfragment', ['product_id', 'display_order'])
+
+        # Deleting model 'ProductFragment'
+        db.delete_table(u'catalogue_productfragment')
+
         # Deleting field 'Product.authors'
         db.delete_column(u'catalogue_product', 'authors')
 
@@ -135,9 +155,10 @@ class Migration(SchemaMigration):
             'value_text': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'})
         },
         u'catalogue.productcategory': {
-            'Meta': {'ordering': "['product', 'category']", 'object_name': 'ProductCategory'},
+            'Meta': {'ordering': "['-is_canonical']", 'object_name': 'ProductCategory'},
             'category': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['catalogue.Category']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_canonical': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
             'product': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['catalogue.Product']"})
         },
         u'catalogue.productclass': {
@@ -155,6 +176,15 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'product': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['catalogue.Product']"}),
             'role': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['catalogue.ContributorRole']", 'null': 'True', 'blank': 'True'})
+        },
+        u'catalogue.productfragment': {
+            'Meta': {'ordering': "['display_order']", 'unique_together': "(('product', 'display_order'),)", 'object_name': 'ProductFragment'},
+            'caption': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'date_created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'display_order': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'original': ('django.db.models.fields.files.FileField', [], {'max_length': '255'}),
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'fragments'", 'to': u"orm['catalogue.Product']"})
         },
         u'catalogue.productimage': {
             'Meta': {'ordering': "['display_order']", 'unique_together': "(('product', 'display_order'),)", 'object_name': 'ProductImage'},
