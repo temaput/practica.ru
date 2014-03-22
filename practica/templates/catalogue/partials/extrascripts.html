@@ -1,0 +1,56 @@
+{% load staticfiles %}
+{% load compress %}
+<script type="text/javascript">
+    $(function () {
+        var ITEMS_IN_ROW = 4;
+        var $books = $(".product_pod").closest("li");
+        var show = function ($instance, $last) {
+            $instance.hide().insertAfter($last);
+            $instance.slideToggle();
+        };
+        var hide = function ($instance) {
+            $instance.slideToggle(function () {
+                $(this).detach();
+            });
+        };
+        $books.find("a").click(function (event) {
+            console.log("clicked");
+            var $item = $(this).closest("li");
+            var $instance = $item.data("instance");
+            if ($instance) {
+            if ($.contains(document.documentElement, $instance[0]))
+                hide($instance);
+            else 
+                show($instance, $item.data("last"));
+            } else {
+                var pos = $books.index($item);
+                var last_pos = pos + ITEMS_IN_ROW - 1 - pos % ITEMS_IN_ROW;
+                var $last = $books.slice(pos, last_pos + 1).last();
+                $instance = $('<li class="span12 opened"><hr>Загрузка...<hr></li>');
+                var url = "" + $(this).attr("href") + "ajah/";
+                console.log("url is " + url);
+                var close_btn = $('<p class="span11"><a class="close" href="#">&times;</a></p>');
+                $.get(
+                    url, 
+                    function (data) {
+                        var parsed = $.parseHTML(data);
+                        console.log(parsed);
+                        $instance.empty().append($("<hr>")).append(close_btn).append(
+                            $(parsed).filter(".product_page")).append($("<hr>"));
+                        $instance.find("a.close").click(function (event) {
+                            console.log("closing instance: " + $instance);
+                            hide($instance);
+                            event.preventDefault();
+                        });
+                    });
+                $item.data("instance", $instance);
+                $item.data("last", $last);
+                show($instance, $last);
+            };
+            event.preventDefault();
+        });
+    });
+</script>
+
+{% compress js %}
+{% endcompress %}
