@@ -148,7 +148,8 @@ TEMPLATE_DIRS = (
 
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH':root('whoosh_index')
     },
 }
 
@@ -169,6 +170,7 @@ INSTALLED_APPS = [
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'apps.invoice',
+    'haystack',
     'robokassa',
 ] + get_core_apps(['apps.dashboard', 'apps.checkout', 'apps.catalogue', 'apps.shipping'])
 

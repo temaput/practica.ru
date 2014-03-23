@@ -9,3 +9,4 @@ db.*
 practica/media/
 practica/manage.py
 practica/practica/settings/dev.py
+practica/whoosh_index/
