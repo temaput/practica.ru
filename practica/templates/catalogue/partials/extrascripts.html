@@ -5,7 +5,7 @@
         var ITEMS_IN_ROW = 4;
         var $books = $(".product_pod").closest("li");
         var show = function ($instance, $last) {
-            $instance.hide().insertAfter($last);
+            $instance.hide().insertBefore($last);
             $instance.slideToggle();
         };
         var hide = function ($instance) {
@@ -24,8 +24,8 @@
                 show($instance, $item.data("last"));
             } else {
                 var pos = $books.index($item);
-                var last_pos = pos + ITEMS_IN_ROW - 1 - pos % ITEMS_IN_ROW;
-                var $last = $books.slice(pos, last_pos + 1).last();
+                var last_pos = pos - pos % ITEMS_IN_ROW;
+                var $last = $books.slice(0, last_pos + 1).last();
                 $instance = $('<li class="span12 opened"><hr>Загрузка...<hr></li>');
                 var url = "" + $(this).attr("href") + "ajah/";
                 console.log("url is " + url);
