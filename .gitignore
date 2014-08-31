@@ -1,10 +1,10 @@
 # Custom
 
-practica/manage.py
 _locale/
-practica/staticfiles/
-practica/media/
-practica/whoosh_index/
+/practica/staticfiles/
+/practica/media/
+/practica/whoosh_index/
+/practica/manage.py
 *.sqlite3
 local_settings.py
 *.bak
