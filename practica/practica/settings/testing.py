@@ -2,57 +2,31 @@ from .base import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-ON_DOMAIN = True
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': root('db.sqlite3'),                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
-# Absolute filesystem path to the directory that will hold user-uploaded files.
-# Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT =  ondomain('media')
+from .local_settings import DATABASES
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# Absolute path to the directory static files should be collected to.
-# Don't put anything in this directory yourself; store your static files
-# in apps' "static/" subdirectories and in STATICFILES_DIRS.
-# Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ondomain('static')
-
-# Dunno if it works, need checking
-TEMP = '/tmp/mc-granat-site'
-SEND_BROKEN_LINK_EMAILS = True
-
-
-ALLOWED_HOSTS = ['*']  # remove this!!!
+MEDIA_ROOT = root('media')
 
 #
-# ANALITICS
-# =========
-
-# GOOGLE_ANALYTICS_ID = get_env('GRANAT_GOOGLE_ANALYTICS_ID')
-# YANDEX_METRIKA_ID = get_env('GRANAT_YANDEX_METRIKA_ID')
-
-
-# EMAILS
-#========
-
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = '/tmp/granat-messages' # change this to a proper location
-EMAIL_HOST_USER = 'order@granatbooks.ru'
-
-SERVER_EMAIL = EMAIL_HOST_USER
-ERROR_TEST = True  #this should be false after succesfull testing
-ROBOKASSA_TEST_MODE = True
-
+# Debug toolbar
+#
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
+INSTALLED_APPS += ('debug_toolbar',)
+MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+INTERNAL_IPS = ['192.168.1.18', '192.168.1.210', '127.0.0.1']
+DEBUG_TOOLBAR_CONFIG = {
+}
 
 # Logging
 # =======
+
+ERROR_TEST = True  #this should be false after succesfull testing
+ROBOKASSA_TEST_MODE = True
+
+from os import path
+
+STATIC_ROOT = path.expanduser('~/STATIC_ROOT')
 
 LOG_ROOT = root('logs')
 # Ensure log root exists
@@ -75,22 +49,22 @@ LOGGING = {
             'format': '[%(asctime)s] %(message)s'
         },
     },
-    'filters': {
-        'require_debug_false': {
+    'filters': {  # describe additional conditions of logging
+        'require_debug_false': {  # works only in production (for emailing to admins)
             '()': 'django.utils.log.RequireDebugFalse'
         }
     },
-    'handlers': {
-        'null': {
+    'handlers': {  # describe the destination of log (file, console, email...)
+        'null': {  # do nothing
             'level': 'DEBUG',
             'class': 'django.utils.log.NullHandler',
         },
-        'console': {
+        'console': {  # print to console
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
-        'checkout_file': {
+        'checkout_file': {  # all oscar logs printed to LOG_ROOT/filename
             'level': 'INFO',
             'class': 'oscar.core.logging.handlers.EnvFileHandler',
             'filename': 'checkout.log',
@@ -114,19 +88,23 @@ LOGGING = {
             'filename': 'sorl.log',
             'formatter': 'verbose'
         },
-        'mail_admins': {
+        'mail_admins': {  # this is for mailing admins in case of any ERROR
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
             'filters': ['require_debug_false'],
         },
     },
-    'loggers': {
-        'django': {
+    'root': {  # all other loggers
+        'handlers': ['console'],
+        'level': 'DEBUG',
+        },
+    'loggers': {  # the are the loggers that correspond to getLogger(name)
+        'django': {  # correspond to getLogger('django')
             'handlers': ['null'],
             'propagate': True,
             'level': 'INFO',
         },
-        'django.request': {
+        'django.request': {  # getLogger('django.request')
             'handlers': ['mail_admins', 'error_file'],
             'level': 'ERROR',
             'propagate': False,
@@ -152,17 +130,25 @@ LOGGING = {
             'level': 'DEBUG',
         },
         'robokassa': {
-            'handlers': ['mail_admins', 'error_file'],
-            'level': 'ERROR',
-            'propagate': True,
+            'handlers':['console'],
+            'propagate': False,
+            'level': 'DEBUG'
+            },
+        'tarifcalc': {
+            'handlers': ['console'],
+            'propagate': False,
+            'level': 'INFO'
+            },
+        'catalogue': {
+            'handlers': ['console'],
+            'propagate': False,
+            'level': 'DEBUG'
             },
         # suppress output of this debug toolbar panel
-        'template_timings_panel': {
+        'template_timings_panel': {  # this has something to do with django debug panel
             'handlers': ['null'],
             'level': 'DEBUG',
             'propagate': False,
         }
     }
 }
-
-
