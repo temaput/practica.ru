@@ -1,0 +1,41 @@
+<ul>
+    {% for method in method_list %}
+        <li>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="method_code" value="{{ method.code }}" />
+            <button class="link blue" type="submit"><span class="text">{{ method.name|lower }}</span></button>
+            <div class="tooltip">
+                <span class="text">{{ method.description|safe }}</span><br>
+                {% if method.charge_incl_tax %}
+                    <span class="info">стоимость доставки</span><br>
+                    <span class="price-amount">
+                        {% if method.is_tax_known %}
+                            {{ method.charge_incl_tax|floatformat:"0" }}
+                            {% else %}
+                            {{ method.charge_excl_tax|floatformat:"0" }}
+                        {% endif %}&nbsp;<span class="rub">&#x20B7;</span>
+                    </span><br>
+                    {% if method.is_discounted %}
+                        <span class="info">
+                            {% with discount=method.get_discount %}
+                                {% with amount=discount.discount name=discount.name %}
+                                    С учетом скидки '{{ name }}' {{ amount|floatformat:"0" }}&nbsp;<span class="rub">&#x20B7;</span>
+                                {% endwith %}
+                            {% endwith %}
+                        </span>
+                        <br>
+                    {% endif %}
+                    {# we give free shipping note if it is not free #}
+                    {% if method.free_shipping_threshold %}
+                        <strong class="warning">
+                            при заказе свыше {{ method.free_shipping_threshold|floatformat:"0" }}&nbsp;&#x20B7;<br>
+                            доставка бесплатно
+                        </strong>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </form>
+        </li>
+    {% endfor %}
+</ul>

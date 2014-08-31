@@ -23,16 +23,6 @@ will be processed shortly.{% endblocktrans %}</p>
 <p>{% for field in order.shipping_address.active_address_fields %}  {{ field }}<br/>
 {% endfor %}</p>
 
-<p>Вы выбрали способ оплаты: 
-{% for source in order.sources.all %}
-    {{ source }}
-    {% if source.source_type.code == "sbrf_slip" %}
-    <a href="http://{{ site.domain }}{% url 'invoice:sbrf_slip' order.pk %}?hash={{ order.verification_hash }}">Распечатать квитанцию</a>
-    {% endif %}
-{% empty %}
-    {% trans "No payment was required for this order." %}
-{% endfor %}
-</p>
 {% if status_url %}
 <p>{% blocktrans %}You can view the status of this order by clicking <a href="{{ status_url }}" title="order status">here</a>{% endblocktrans %}</p>
 {% endif %}{% endblock %}

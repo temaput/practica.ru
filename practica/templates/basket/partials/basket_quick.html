@@ -1,4 +1,3 @@
-{% load url from future %}
 {% load history_tags %}
 {% load basket_tags %}
 {% load currency_filters %}
@@ -20,10 +19,10 @@
                             {% endwith %}
                         </div>
                     </div>
-                    <div class="span5">
+                    <div class="span6">
                         <h5><a href="{{ line.product.get_absolute_url }}">{{ line.description }}</a></h5>
                     </div>
-                    <div class="span2 align-center"><strong>{% trans "Qty" %}</strong> {{ line.quantity }}</div>
+                    <div class="span1 align-center"><strong>{% trans "Qty" %}</strong> {{ line.quantity }}</div>
                     <div class="span2 price_color align-right">{{ line.unit_price_excl_tax|currency:request.basket.currency }}</div>
                 </div>
             </li>

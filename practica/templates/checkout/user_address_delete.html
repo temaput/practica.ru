@@ -1,0 +1,32 @@
+{% extends "checkout/checkout.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Delete address?" %} | {{ block.super }}
+{% endblock title %}
+
+{% block order_contents %}{% endblock %}
+{% block shipping_method %}{% endblock %}
+{% block payment_method %}{% endblock %}
+{% block payment_details %}{% endblock %}
+
+
+{% block headertext %}
+    <span class="red text">удаление адреса</span>
+{% endblock %}
+
+{% block shipping_address %}
+    <h4>Удалить этот адрес?</h4>
+    <div class="indented">
+    <form action="." method="post">
+        {% csrf_token %}
+            <address>
+                {% for field in object.active_address_fields %}
+                    {{ field }}<br/>
+                {% endfor %}
+            </address>
+            <p><button type="submit" class="button big active red"><span class="text">удалить&nbsp;<span class="icon white-arrow"></span></span></button></p>
+            <p><a class="blue" href="{% url 'checkout:shipping-address' %}"><span class="text">вернуться к покупкам</span></a></p>
+    </form>
+</div>
+{% endblock shipping_address %}

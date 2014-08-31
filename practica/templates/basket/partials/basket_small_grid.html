@@ -1,0 +1,20 @@
+{% load thumbnail %}
+{% if not basket.is_empty %}
+    <div class="cart-grid-small">
+        <ul>
+            <li>
+            {% for line in basket.lines.all %}
+                {% with line.product as product %}
+                <div class="good-cover">
+                    {% with image=product.primary_image %}
+                    {% thumbnail image.original "90" upscale=False as thumb %}
+                    <img src="{{ thumb.url }}" alt="{{ product.get_title }}" />
+                    {% endthumbnail %}
+                    {% endwith %}
+                </div>
+                {% endwith %}
+                </li>{% if not forloop.last %}<li>{% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}

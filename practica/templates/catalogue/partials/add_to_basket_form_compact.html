@@ -1,0 +1,30 @@
+{% load basket_tags %}
+{% load i18n %}
+{% load purchase_info_tags %}
+{% load currency_filters %}
+
+{% purchase_info_for_product request product as session %}
+
+
+{% basket_form request product as basket_form single %}
+<form class="add-to-basket" action="{% url 'basket:add' %}" method="post">
+    {% csrf_token %}
+    {{ basket_form.as_p }}
+    {% if session.availability.is_available_to_buy %}
+        <button name="send" class="good__price small active" type="submit">
+        {% else %}
+        <button name="send" class="good__price small inactive" type="submit" disabled="disabled">
+    {% endif %}
+        {% if session.price.exists %}
+            {% if session.price.is_tax_known %}
+            <span class="price-amount">{{ session.price.incl_tax|floatformat:"0" }}</span>
+            {% else %}
+            <span class="price-amount">{{ session.price.excl_tax|floatformat:"0" }}</span>
+            {% endif %}
+            <span class="rub">&#x20B7;</span>
+        {% else %}
+            <span class="price-amount">Купить</span>
+        {% endif %}
+        <span class="icon blue-arrow"></span>
+    </button><div class="messages small"></div>
+</form>

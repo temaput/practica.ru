@@ -1,4 +1,12 @@
-# set encoding=utf-8
+#!/usr/bin/env python
+# vi:fileencoding=utf-8
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import unicode_literals
+
+from logging import getLogger
+log = getLogger("catatlogue.models")
+
 
 """
 Customized product models
@@ -9,10 +17,24 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 from oscar.apps.catalogue.abstract_models import AbstractProduct
+series_name = 'Серии'
+
 
 class Product(AbstractProduct):
-    authors = models.CharField(u'Авторы', max_length=255, blank=True, null=True)
+    authors = models.CharField(u'Авторы',
+                               max_length=255, blank=True, null=True)
     contents = models.TextField(u'Оглавление', blank=True, null=True)
+
+    @property
+    def serie(self):
+        log.debug("in serie")
+        Category = self.categories.model
+        if Category.objects.filter(name=series_name).exists():
+            log.debug("serie category found")
+            series_path = Category.objects.get(name=series_name).path
+            log.debug("series_path is %s", series_path)
+            return self.categories.filter(path__startswith=series_path)[0]
+
 
 class ProductFragment(models.Model):
     """
@@ -41,4 +63,4 @@ class ProductFragment(models.Model):
         return u"%s (фрагмент из '%s')" % (self.caption, self.product)
 
 
-from oscar.apps.catalogue.models import *
+from oscar.apps.catalogue.models import *  # noqa

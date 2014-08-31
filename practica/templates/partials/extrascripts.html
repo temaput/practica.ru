@@ -1,0 +1,9 @@
+{% load staticfiles %}
+{% load compress %}
+
+{# ajah templates #}
+<script type="txt/template" id="login">
+    {% include "partials/ajah_login_form.html" %}
+</script>
+{% compress js %}
+{% endcompress %}

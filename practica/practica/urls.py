@@ -39,9 +39,6 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
         url(r'^admin/', include(admin.site.urls)),
 
-    # Redirect for Shmeman
-        url(r'^[Ss]hmeman/$', RedirectView.as_view(url='/catalogue/shmeman_2')),
-
 )
 # Allow rosetta to be used to add translations
 if 'rosetta' in settings.INSTALLED_APPS:
@@ -49,7 +46,11 @@ if 'rosetta' in settings.INSTALLED_APPS:
         (r'^rosetta/', include('rosetta.urls')),
     )
 
-
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += patterns('',
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    )
 
 if not settings.ON_DOMAIN:
     # Server statics and uploaded media

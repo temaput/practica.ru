@@ -4,21 +4,20 @@ import os
 from os.path import join, realpath, pardir, dirname
 
 
-DOMAIN = 'granat-site.myjino.ru'
-DOMAINPATH = join(
-        os.path.expanduser('~'), 'domains/{domain}'.format(domain=DOMAIN))
-ondomain = lambda x: os.path.join(DOMAINPATH, x)
-ON_DOMAIN = False
-
 from django.core.exceptions import ImproperlyConfigured
+
 def get_env(name):
     try:
         return os.environ[name]
     except KeyError:
-        raise ImproperlyConfigured("Environment error: %s" % name)
+        try:
+            import local_settings
+            return getattr(local_settings, name)
+        except (ImportError, AttributeError):
+            pass
 
 PROJECTPATH =  realpath(join(dirname(__file__), pardir, pardir))
-root = lambda x: join(PROJECTPATH, x) 
+root = lambda x: join(PROJECTPATH, x)
 
 ADMINS = (
     ('Artem Putilov', 'putilkin@gmail.com'),
@@ -40,7 +39,7 @@ TIME_ZONE = 'Europe/Moscow'
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'ru-RU'
- 
+
 LANGUAGES = (
             ('ru', 'Russian'),
             )
@@ -85,10 +84,13 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
+STATIC_ROOT = root('staticfiles')
 
 # Make this unique, and don't share it with anybody.
 
 SECRET_KEY = get_env('PRACTICA_SECRET_KEY')
+ROBOKASSA_PASSWORD1 = get_env('GRANAT_ROBOKASSA_PASSWORD1')
+ROBOKASSA_PASSWORD2 = get_env('GRANAT_ROBOKASSA_PASSWORD2')
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -106,6 +108,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.transaction.TransactionMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'oscar.apps.basket.middleware.BasketMiddleware',
+    'middleware.AjaxMessaging',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -140,10 +143,14 @@ ROOT_URLCONF = 'practica.urls'
 from oscar import OSCAR_MAIN_TEMPLATE_DIR
 TEMPLATE_DIRS = (
         root('templates'),
-        OSCAR_MAIN_TEMPLATE_DIR,
+    OSCAR_MAIN_TEMPLATE_DIR,
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+)
+USE_LESS = True
+COMPRESS_PRECOMPILERS = (
+    ('text/less', 'lessc {infile} {outfile}'),
 )
 
 HAYSTACK_CONNECTIONS = {
@@ -171,8 +178,11 @@ INSTALLED_APPS = [
     'django.contrib.admindocs',
     'apps.invoice',
     'haystack',
-    'robokassa',
-] + get_core_apps(['apps.dashboard', 'apps.checkout', 'apps.catalogue', 'apps.shipping'])
+    # 'robokassa',
+    'practica_templatetags',
+] + get_core_apps(['apps.promotions', 'apps.basket', 'apps.checkout',
+                   'apps.catalogue', 'apps.shipping', 'apps.payment',
+                   'apps.order', 'apps.address'])
 
 
 #LOCALE
@@ -187,4 +197,5 @@ LOCALE_PATHS = (root( 'locale'),)
 from oscar.defaults import *
 from practica.oscar_settings import *
 from practica.requisites import REQUISITES
-from practica.robokassa_settings import *
+# from practica.robokassa_settings import *
+from practica.practica_settings import *

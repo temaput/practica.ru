@@ -1,0 +1,9 @@
+<div class="basket-status">
+{% if quantity == 1 %}
+    <div class="top-line">книга добавлена</div>
+    <div class="bottom-line"><a href="{% url 'basket:summary' %}">в мои покупки <span class="icon blue-arrow"></span></a></div>
+{% else %}
+    <div class="top-line">книга добавлена</div>
+    <div class="bottom-line"><a href="{% url 'basket:summary' %}">в мои покупки ({{ quantity }} шт.)<span class="icon blue-arrow"></span></a></div>
+{% endif %}
+</div>

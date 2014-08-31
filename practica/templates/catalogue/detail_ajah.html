@@ -8,134 +8,140 @@
 {% load i18n %}
 {% load purchase_info_tags %}
 
-
-<article class="product_page"><!-- Start of product page -->
-
-    <div class="row-fluid">
-
-        {% block product_gallery %}
-        <div class="span6">
-            {% include "catalogue/partials/gallery.html" %}
+<article class="details">
+    <header>
+        <div class="social"> 
+            <a href=""><span class="icon social-f"></span></a>
+            <a href=""><span class="icon social-b"></span></a>
         </div>
-        {% endblock %}
-
+        <div class="series"><a href="{{ product.serie.get_absolute_url }}">{{ product.serie.name }}</a></div>
+        <div class="close"><a href="#close"><span class="icon x"></span></a>
+        </div>
+    </header>
+    <div class="main">
+        <div class="cover"><img src="{{ product.primary_image.original.url }}" alt="{{ product.get_title }}" /></div>
         {% block product_main %}
-        <div class="span6">
-            {% comment %} 
-            This is a but clunky here.  Better to have some kind of JS-driven dashboard menu that 
-            pops out when clicked.  A bit like the Django-Debug-Toolbar button
-            {% endcomment %}
+        <div class="description">
+            <div class="colophon">
             {% if user.is_authenticated and user.is_staff %}
-                <a class="pull-right hidden-phone" href="{% url 'dashboard:catalogue-product' pk=product.id %}"><small><i class="icon-edit"></i> {% trans "Edit this product" %}</small></a>
+                <a class="edit" href="{% url 'dashboard:catalogue-product' pk=product.id %}"><small>Редактировать</small></a>
             {% endif %}
-            <h1>{{ product.get_title }}</h1>
-            <h3><small>{{ product.authors }}</small></h3>
-
-            {% block product_stock_record %}
-                {% include "catalogue/partials/stock_record.html" with verbose=1 %}
-            {% endblock %}
-
-            {% iffeature "reviews" %}
-                {% if product.rating != None %}
-                    <h4 class="star-rating {{ product.rating|as_stars }}">
-                        <i class="icon-star"></i>
-                        <i class="icon-star"></i>
-                        <i class="icon-star"></i>
-                        <i class="icon-star"></i>
-                        <i class="icon-star"></i>
-
-                        <small><a href="{% url 'catalogue:reviews-list' product_slug=product.slug product_pk=product.id %}">
-                            {% blocktrans count reviews|length as num_reviews %}
-                            1 customer review
-                            {% plural %}
-                            {{ num_reviews }} customer reviews
-                            {% endblocktrans %}
-                        </a></small>
-                        &nbsp;
-                {% else %}
-                    <h4>
+                <h1>{{ product.get_title }}</h1>
+                <h2 class="authors">{{ product.authors }}</h2>
+                {% if product.attr.editors %}
+                <h2>{{ product.attr.editors }}</h2>
                 {% endif %}
-                {% if product|is_review_permitted:user %}
-                    <a id="write_review" href="{% url 'catalogue:reviews-add' product_slug=product.slug product_pk=product.id %}#addreview" class="btn btn-success btn-small">
-                        {% trans "Write a review" %}
-                    </a>
+                <p>
+                {% if product.attr.format %}
+                <span class="format">{{ product.attr.format }}</span>
+                <br />
                 {% endif %}
-                </h4>
-            {% endiffeature %}
-
-            <hr/>
-
-            {% block product_basket_form %}
-                {% include "catalogue/partials/add_to_basket_form.html" %}
-            {% endblock %}
-        </div><!-- /span6 -->
-        {% endblock %}
-
-    </div><!-- /row-fluid -->
-
-    {% block product_description %}
-        <div class="tabbable"> <!-- Only required for left/right tabs -->
-            <ul class="nav nav-tabs">
-                <li><a href="#description-tab" data-toggle="tab">Описание</a></li>
-                {% if product.contents %}
-                <li ><a href="#contents-tab" data-toggle="tab">Оглавление</a></li>
+                {% if product.upc %}
+                <span class="SKU">ISBN {{ product.upc }}</span>
+                <br />
                 {% endif %}
-                <li ><a href="#parameters-tab" data-toggle="tab">Выходные данные</a></li>
-                {% if product.attr.contributors %}
-                <li ><a href="#contributors-tab" data-toggle="tab">Об авторах</a></li>
-                {% endif %}
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane" id="description-tab">
-                    <p>{{ product.description|safe }}</p>
-                </div>
-                <div class="tab-pane" id="contents-tab">
-                    <p>{{ product.contents|safe }}</p>
-                </div>
-                <div class="tab-pane" id="parameters-tab">
-                    {% block product_info %}
-                    <table class="table table-striped table-condensed">
-                        {% if product.upc %}
-                        <tr>
-                            <th>{% trans "UPC" %}</th><td>{{ product.upc }}</td>
-                        </tr>
-                        {% endif %}
-                        {% purchase_info_for_product request product as session %}
-                        {% for av in product.attribute_values.all %}
-                            {% ifnotequal av.attribute.code "contributors" %}
-                                <tr>
-                                    <th>{{ av.attribute.name }}</th>
-                                    <td>{{ av.value_as_html }}</td>
-                                </tr>
-                            {% endifnotequal %}
-                        {% endfor %}
-                        <tr>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </table>
-                    {% endblock %}
-                </div>
-                <div class="tab-pane" id="contributors-tab">
-                    <p>{{ product.attr.contributors|safe }}</p>
-                </div>
-
-
+                <span class="musthave">{{ product.stockrecord.partner.name }}, {{ product.attr.year }}.</span>
+                </p>
+            </div>
+            <div class="details__controls">
+                {% block product_stock_record %}
+                    {% include "catalogue/partials/stock_record.html" with verbose=1 %}
+                {% endblock %}
+                {% block product_basket_form %}
+                    {% include "catalogue/partials/add_to_basket_form.html" %}
+                {% endblock %}
             </div>
         </div>
-    {% endblock %}
-
-    {% if product.fragments.all %}
-        <div class="sub-header">
-            <h2>Фрагменты издания</h2>
+        {% endblock %}
+    </div>
+    <footer>
+    {% block product_info %}
+        <div class="toggle">
+            <ul class="toggle-controls">
+                {% if product.description %}
+                <li><a href="" data-toggle="annotation">описание</a></li>
+                {% endif %}
+                {% if product.contents %}
+                <li class="active"><a href="" data-toggle="contents" >оглавление</a></li>
+                {% endif %}
+            </ul>
+            <ul class="footer__body toggle-body">
+                {% if product.description %}
+                <li data-toggle="annotation"><p>{{ product.description|safe }}</p></li>
+                {% endif %}
+                {% if product.contents %}
+                <li class="active" data-toggle="contents"><p>{{ product.contents|safe }}</p></li>
+                {% endif %}
+            </ul>
         </div>
-        <ul class="row-fluid">
-            {% for fragment in product.fragments.all %}
-            <li >
-                <a href="{{ fragment.original.url }}">{{fragment.caption}}</a>
-            </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    {% endblock %}
+    </footer>
+</article>
 
-</article><!-- End of product page -->
+
+{% comment %}
+========================================
+    {% iffeature "reviews" %}
+        {% block product_review %}
+        <section>
+            <div id="reviews" class="sub-header">
+                {% if product.num_approved_reviews > 3 %}
+                    <a href="{% url 'catalogue:reviews-list' product_slug=product.slug product_pk=product.id %}" class="btn pull-right">{% trans "See all reviews" %}</a>
+                {% endif %}
+                <h2>{% trans "Customer Reviews" %}</h2>
+            </div>
+
+            {% if product.num_approved_reviews == 0 %}
+                <p>
+                    {% if product|is_review_permitted:user %}
+                        {% url 'catalogue:reviews-add' product_slug=product.slug product_pk=product.id as add_review_url %}
+                            {% blocktrans %}This product does not have any reviews yet -
+                            <a href="{{ add_review_url }}#addreview">be the first to write one</a>.
+                        {% endblocktrans %}
+                    {% else %}
+                        {% trans "This product does not have any reviews yet" %}.
+                    {% endif %}
+                </p>
+            {% else %}
+                <ol class="unstyled review-list">
+                    {% for review in reviews|slice:":3" %}
+                        <li>
+                        {% include 'catalogue/partials/review.html' %}
+                        </li>
+                    {% endfor %}
+                </ol>
+            {% endif %}
+        </section>
+        {% endblock product_review %}
+    {% endiffeature %}
+
+    {% with related_products=product.related_products.all|slice:":6" %}
+        {% if related_products %}
+            <div class="sub-header">
+                <h2>{% trans "Related items" %}</h2>
+            </div>
+            <ul class="row-fluid">
+                {% for product in related_products %}
+                <li class="span2 {% if forloop.counter0|divisibleby:"6" %}no-margin{% endif %}">
+                    {% render_product product %}
+                </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    {% with recommended_products=product.recommended_products.all|slice:":6" %}
+        {% if recommended_products %}
+            <div class="sub-header">
+                <h2>{% trans "Recommended items" %}</h2>
+            </div>
+            <ul class="row-fluid">
+                {% for product in recommended_products %}
+                <li class="span2 {% if forloop.counter0|divisibleby:"6" %}no-margin{% endif %}">
+                    {% render_product product %}
+                </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+{% endcomment %}

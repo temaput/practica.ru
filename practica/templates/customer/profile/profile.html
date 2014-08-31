@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% load i18n %}
+
+{% block headertext %}
+    <span class="blue text">профиль</span>
+{% endblock %}
+
+{% block content %}
+    <div class="indented">
+    <p>Вы вошли как</p>
+    <p><strong>{{ user.email }}</strong><a href="logout" class="red">
+        <span class="text">выйти</span></a></p>
+    <p><a href="{% url 'customer:change-password' %}" class="btn btn-primary"><span class="text">{% trans 'Change password' %}</span></a></p>
+    <p><a href="{% url 'customer:profile-update' %}" class="btn btn-primary"><span class="text">{% trans 'Edit profile' %}</span></a></p>
+    <p><a id="delete_profile" href="{% url 'customer:profile-delete' %}" class="red"><span class="text">{% trans 'Delete profile' %}</span></a></p>
+</div>
+
+    {% endblock %}

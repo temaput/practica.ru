@@ -1,10 +1,17 @@
-<footer class="footer container-fluid">
+<footer>
     {% block footer %}
-
-    <ul class="footer_links" >
-        <li>Издательский дом &laquo;Практика&raquo;</li> 
-        <li>+7 499 921 2204</li>
-        <li><a href="mailto:practica@practica.ru">practica@practica.ru</a></li>
-    </ul>
+    <div class="main_footer">
+        <div class="career"><a href="" class="career__authors"><span class="icon info-black"></span><span class="text">авторам</span></a>
+            <a href="" class="career__translate"><span class="text">переводы</span></a>
+        </div>
+        <div class="right-align">
+            <div class="phone-number"><span>+7&nbsp;&nbsp;499&nbsp;&nbsp;921&nbsp;&nbsp;2204</span>
+            </div>
+            <div class="mailto"><a href="mailto:practica@practica.ru">practica@practica.ru</a>
+            </div>
+            <div class="copy"><span class="copy__sign">©&nbsp;</span> <span>Издательский&nbsp;дом&nbsp;«Практика»</span><span class="copy__year">&nbsp;&nbsp;2014</span>
+            </div>
+        </div>
+    </div>
     {% endblock %}
 </footer>

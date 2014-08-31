@@ -1,0 +1,26 @@
+{% load form_tags %}
+
+{% if field %}
+    {% if field.is_hidden %}
+        {{ field }}
+        {% else %}
+        <div class="control-element {{field.id_for_label}}">
+            {% if has_label %}
+                {% block label %}
+                    <label for="{{ field.auto_id }}" class="control-label{% if field.field.required %} required{% endif %}">
+                        {{ field.label|safe }}
+                        {% if field.field.required %} <span>*</span>{% endif %}
+                    </label>
+                {% endblock %}
+            {% endif %}
+            <input class="{{ class }} {% if field.errors %}error{% endif %}" type="{{ field.field.widget.input_type }}" id="{{ field.id_for_label }}" {% if field.value %}value="{{ field.value }}"{% endif %} {% if placeholder %}placeholder="{% if placeholder == 1 %}{{ field.label }}{% else %}{{ placeholder }}{% endif %}"{% endif %} name="{{ field.html_name }}"/>
+            {% if field.errors %}
+                <p class="field_errors">
+                {% for error in field.errors %}
+                    <em>{{ error }}</em><br>
+                {% endfor %}
+                </p>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endif %} 

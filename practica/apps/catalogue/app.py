@@ -9,21 +9,21 @@ class BaseCatalogueApplication(CoreCatApp):
     detail_ajah = views.ProductDetailAjah
 
     def get_urls(self):
-        urlpatterns = super(CoreCatApp, self).get_urls()
+        urlpatterns = super(BaseCatalogueApplication, self).get_urls()
         urls = [
-            url(r'^$', self.index_view.as_view(), name='index'),
+            # has different urlname for legacy reasons
+            url(r'^$', self.category_view.as_view(), name='index'),
             url(r'^(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
                 self.detail_view.as_view(), name='detail'),
-            url(r'^(?P<product_slug>[\w-]*)_(?P<pk>\d+)/ajah/$',
+            url(r'^ajah/(?P<product_slug>[\w-]*)_(?P<pk>\d+)/$',
                 self.detail_ajah.as_view(), name='detail_ajah'),
             url(r'^category/(?P<category_slug>[\w-]+(/[\w-]+)*)_(?P<pk>\d+)/$',
                 self.category_view.as_view(), name='category'),
+            # fallback URL if a user chops of the last part of the URL
+            url(r'^category/(?P<category_slug>[\w-]+(/[\w-]+)*)/$',
+                self.category_view.as_view()),
             url(r'^ranges/(?P<slug>[\w-]+)/$',
-                self.range_view.as_view(), name='range'),
-            # Legacy route for the category view
-            url(r'^(?P<category_slug>[\w-]+(/[\w-]+)*)/$',
-                self.category_view.as_view(), name='category'),
-            ]
+                self.range_view.as_view(), name='range')]
         urlpatterns += patterns('', *urls)
         return self.post_process_urls(urlpatterns)
 

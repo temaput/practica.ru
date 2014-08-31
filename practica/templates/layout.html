@@ -7,28 +7,27 @@
     {% include "partials/nav_accounts.html" %}
 
     {# Site logo/title, mini-basket, browse dropdown and searchbox #}
-    <header class="header container-fluid">
-        <div class="page_inner">
-            <div class="row-fluid">
-                {% include "partials/brand.html" %}
-                    {# Mini-basket wrapped in a block so some templates can now display it #}
-                {% block mini_basket %}{% include "partials/mini_basket.html" %}{% endblock %}
-            </div>
-        </div>
+    <header>
+        <ul class="sub">
+        <li class="sub__logo">{% include "partials/brand.html" %}</li>
+        <li class="sub__search">{% include "partials/search.html" %}</li>
+        <li class="sub__cart">{% block mini_basket %}<div class="cart">{% include "partials/mini_basket.html" %}</div>{% endblock %}</li>
+                
+        </ul>
+
         {% block navigation %}
+        <!-- Navigator -->
+        <nav>
             {% include "partials/nav_primary.html" %}
+        </nav>
         {% endblock %}
     </header>
 
     {# Main content of page - other layout templates may override this block #}
     {% block content_wrapper %}
-    <div class="container-fluid page">
-        <div class="page_inner">
             {% block breadcrumbs %}{% endblock %}
             {% block header %}
-            <div class="page-header action">
                 <h1>{% block headertext %}{% endblock %}</h1>
-            </div>
             {% endblock %}
             {% include "partials/alert_messages.html" %}
             {% block subnavigation %}{% endblock %}
@@ -45,8 +44,6 @@
                 {# Div exists for AJAX updates to entire content section #}
                 <div id="content_inner">{% block content %}{% endblock %}</div>
             </div>
-        </div>
-    </div>
     {% endblock %}
 
     {% include "partials/footer.html" %}

@@ -6,19 +6,12 @@
 {% endblock %}
 
 {% block headertext %}
-    {{ flatpage.title }}
+    <span class="text">{{ flatpage.title }}</span>
 {% endblock %}
 
 {% block breadcrumbs %}
-    <ul class="breadcrumb">
-        <li>
-            <a href="{% url 'promotions:home' %}">{% trans "Home" %}</a>
-            <span class="divider">/</span>
-        </li>
-        <li class="active">{{ flatpage.title }}</li>
-    </ul>
 {% endblock %}
 
 {% block content %}
-    <article>{{ flatpage.content }}</article>
+    <article class="flatpage">{{ flatpage.content }}</article>
 {% endblock %}

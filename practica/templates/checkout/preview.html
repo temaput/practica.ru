@@ -1,0 +1,110 @@
+{% extends "checkout/checkout.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Order preview" %} | {{ block.super }}
+{% endblock %}
+{% block headertext %}
+    <span class="cart-header text">подтвердите заказ</span>
+{% endblock %}
+
+{% block checkout_title %}
+    {% trans "Preview order" %}
+{% endblock %}
+
+{% block checkout_login %}{% endblock %}
+{% block payment_method %}{% endblock %}
+{% block shipping_method %}{% endblock %}
+{% block shipping_address %}{% endblock %}
+{% block place_order %}
+    <div class="cart-controls-bar">
+        <div class="label-big">
+            <span class="price-amount">
+                {% if order_total.is_tax_known %}
+                    {{ order_total.incl_tax|floatformat:"0" }} 
+                    {% else %}
+                    {{ order_total.excl_tax|floatformat:"0" }}
+                {% endif %}&nbsp;<span class="rub">&#x20B7;</span>
+            </span>
+        </div><!-- confirmation form 
+        --><form method="post" action="{% url 'checkout:preview' %}" id="place_order_form">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="place_order" />
+
+            {% comment %}
+            When submitting sensitive data on the payment details page (eg a bankcard)
+            we don't want to save the data and so we pass the bound form to the preview
+            template and render it in a hidden div.  Then the payment information will
+            get re-submitted when the user confirms the order.
+            {% endcomment %}
+            <div style="display:none">
+                {% block hiddenforms %}{% endblock %}
+            </div>
+
+            <button class="button big active" id='place-order' type="submit">
+                {% trans "Place order"|lower %}
+                <span class="icon white-arrow"></span>
+            </button>
+        </form><!-- confirmation list 
+        --><div class="label-big annotated-list">
+            <ul>
+                {% if shipping_address %}
+                    <li>
+                    <a class="link blue" href="{% url "checkout:shipping-address" %}?full=true">
+                        <span class="text">адрес</span>
+                    </a>
+                    <div class="tooltip">
+                        <address>
+                            {% for field in shipping_address.active_address_fields %}
+                                {% if forloop.first %}<b>{{ field }}</b>
+                                {% else %}{{ field }}
+                                {% endif %}<br/>
+                            {% endfor %}
+                        </address>
+                        {% if shipping_address.phone_number %}
+                            <br><span class="text">
+                            {{ shipping_address.phone_number }}
+                            {% if guest_email %}
+                                <br/>{{ guest_email }}
+                            {% endif %}
+                            </span>
+                        {% endif %}
+                    </div>
+                    </li>
+                {% endif %}
+                {% if shipping_method %}
+                    <li>
+                    <a class="link blue" href="{% url "checkout:shipping-method" %}?full=true">
+                        <span class="text">доставка</span>
+                    </a>
+                    <div class="tooltip">
+                        <span class="title">{{ shipping_method.name|lower }}</span><br>
+                        <span class="text">{{ shipping_method.description|safe }}</span><br>
+                        <span class="info">стоимость доставки</span><br>
+                        <span class="price-amount">
+                            {% if shipping_method.is_tax_known %}
+                                {{ shipping_method.charge_incl_tax|floatformat:"0" }}
+                                {% else %}
+                                {{ shipping_method.charge_excl_tax|floatformat:"0" }}
+                            {% endif %}
+                            <span class="rub">&#x20B7;</span>
+                        </span>
+                    </div>
+                    </li>
+                {% endif %}
+                {% if payment_method %}
+                    <li>
+                    <a class="link blue" href="{% url "checkout:payment-method" %}?full=true">
+                        <span class="text">оплата</span>
+                    </a>
+                    <div class="tooltip">
+                        <span class="title">{{ payment_method.name|lower }}</span><br>
+                        <span class="text">{{ payment_method.description|safe }}</span><br>
+                        </span>
+                    </div>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+{% endblock place_order %}

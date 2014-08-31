@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% load thumbnail %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Basket" %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+{% endblock %}
+
+{# Hide mini-basket so we don't have two baskets to keep in sync #}
+{% block mini_basket %}<div class="cart inactive">{% include "partials/mini_basket.html" %}</div>{% endblock %}
+
+{% block headertext %}
+    <span class="cart-header text">мои покупки</span>
+{% endblock %}
+
+{% block content %}
+    {# Use a partial template so that AJAX can be used to re-render basket #}
+    {% include 'basket/partials/basket_content.html' %}
+{% endblock content %}
+{% block extrascripts %}
+    {% include "partials/basket_extrascripts.html" %}
+    {{ block.super }}
+{% endblock %}
+
+{% block onbodyload %}
+    {{ block.super }}
+    practica.basket_init();
+{% endblock %}

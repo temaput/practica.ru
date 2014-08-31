@@ -1,24 +1,24 @@
-{% extends "oscar/checkout/thank_you.html" %}
-{% load url from future %}
+{% extends "checkout/checkout.html" %}
 {% load currency_filters %}
+{% load thumbnail %}
 {% load i18n %}
-{% block payment_info %}
-    <div class="sub-header">
-        <h2>{% trans "Payment" %}</h2>
-    </div>
-    <div class="well well-success">
-        <h4>{% trans "Payment" %}</h4>
-        {% for source in order.sources.all %}
-            {{ source }}
-            {% if source.source_type.code == "sbrf_slip" %}
-            <a href="{% url 'invoice:sbrf_slip' order.pk %}?hash={{ order.verification_hash }}">Распечатать квитанцию</a>
-            {% endif %}
-        {% empty %}
-            {% trans "No payment was required for this order." %}
-        {% endfor %}
-    </div>
-{% endblock %}
+{% load staticfiles %}
+
+{% block title %}
+    {% trans "Confirmation of order" %} {{ order.number }} | {{ block.super }}
+{% endblock title %}
+
+
+{% block content %}
+    <div class="cart-controls">
+        <div class="cart-controls-bar">
+    <h2>Спасибо, Ваш заказ принят.<br>
+        Наш менеджер в  ближайшее время<br>
+        свяжется с Вами</h2>
+</div>
+</div>
+{% endblock content %}
+
 {% block tracking %}
     {% include "partials/google_analytics_transaction.html" %}
-    {% include "partials/yandex_metrika.html" %}
 {% endblock %}

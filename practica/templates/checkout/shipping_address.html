@@ -1,0 +1,84 @@
+{% extends "checkout/checkout.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% trans "Shipping address" %} | {{ block.super }}
+{% endblock %}
+
+{% block checkout_login %}{% endblock %}
+{% block cart-controls-type %}{% endblock %}
+{% block shipping_address %}
+    {% if request.user.is_authenticated %}
+        {% if addresses %}
+            <h4 class="red">пожалуйста, выберите адрес доставки</h4>
+
+            
+            <div class="cart-controls-bar annotated">
+                <span class="button big active">адрес&nbsp;<span class="icon white-arrow"></span></span>
+                <!-- address list -->
+                <div class="label-big annotated-list"> 
+                    <ul>
+                        {% for address in addresses %}
+                            {% block select_address_form %}
+                                <li>
+                                <form action="{% url 'checkout:shipping-address' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="ship_to" />
+                                    <input type="hidden" name="address_id" value="{{ address.id }}" />
+                                    <button type="submit" class="link blue"><span class="text">{{ address.line4 }}</span></button>
+                                </form>
+                                <div class="tooltip">
+                                    <address>
+                                        {% block select_address_fields %}
+                                            {% for field in address.active_address_fields %}
+                                                {% if not forloop.first %}
+                                                    <span class="text">{{ field }}</span><br/>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endblock %}
+                                    </address><br>
+                                    <a class="info" href="{% url 'checkout:user-address-update' pk=address.id %}">{% trans "Edit address" %}</a></br>
+                                    <a class="warning" href="{% url 'checkout:user-address-delete' pk=address.id %}">{% trans "Delete" %}</a>
+                                </div>
+                                </li>
+                            {% endblock %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <h4 class="red divider">или введите новый адрес</h4>
+        {% endif %}
+    {% endif %}
+    {% if not  request.user.is_authenticated or not addresses %}
+        <h4 class="red">пожалуйста, заполните все поля</h4>
+    {% endif %}
+    {% block new_address_form %}
+        <form action="{% url 'checkout:shipping-address' %}" method="post" id="new_shipping_address" class="new-shipping-address">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+        <div class="control-group name">{% include "partials/form_field_standalone.html" with field=form.first_name placeholder="имя" %}{% include "partials/form_field_standalone.html" with field=form.last_name placeholder="фамилия" %}</div>
+        {% if "line1" in form.fields %}
+            <div class="control-group address">
+                <div class="control-group leftmost">
+                    {% if "line4" in form.fields %}
+                        {% include "partials/form_field_standalone.html" with field=form.postcode placeholder="индекс" %}
+                        {% include "partials/form_field_standalone.html" with field=form.line4 placeholder="город / нас. пункт" %}
+                    {% endif %}
+                    {% include "partials/form_field_standalone.html" with field=form.line1 placeholder="улица" %}
+                </div> 
+                <div class="utmost control-group">
+                    {% include "partials/form_field_standalone.html" with field=form.line2 placeholder="дом корпус / строение" %}
+                    {% include "partials/form_field_standalone.html" with field=form.line3 placeholder="квартира / офис" %}
+                </div>
+            </div>
+        {% endif %}
+        <div class="control-group contacts">{% include "partials/form_field_standalone.html" with field=form.username placeholder="email" %}{% include "partials/form_field_standalone.html" with field=form.phone_number placeholder="контактный телефон" %}</div>
+        <div class="control-group comments"><label class="normal" for="id_notes">комментарии к заказу:</label><textarea name="notes" id="id_notes" cols="30" rows="10"></textarea></div>
+                    <button type="submit" class="big active">готово&nbsp;<span class="icon white-arrow"></span></button>
+        </form>
+    {% endblock %}
+{% endblock shipping_address %}
+
+{% block shipping_method %}{% endblock %}
+
+{% block payment_method %}{% endblock %}

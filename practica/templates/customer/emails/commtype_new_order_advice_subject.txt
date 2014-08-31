@@ -1,1 +1,0 @@
-Новый заказ №{{ order.number }} в интернет-магазине granatbooks.ru

@@ -1,4 +1,9 @@
-#set encoding=utf-8
+#!/usr/bin/env python
+# vi:fileencoding=utf-8
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import unicode_literals
+
 from django.db.models import get_model
 from decimal import Decimal as D
 from django.core.files import File
@@ -22,20 +27,20 @@ get_cover_file = lambda path: join(old_site_path, path)
 get_category_path = lambda cnt: "{0:08}".format(cnt + 10000)
 practica = Partner.objects.get(pk=1)
 paper_book = ProductClass.objects.get(pk=1)
-series_cat = Category.objects.get(pk=1)
+series_cat = Category.objects.get(name="Серии")
 
 soft_cover = AttributeEntity.objects.get(slug='soft_cover')
 hard_cover = AttributeEntity.objects.get(slug='hard_cover')
 cover_attr = ProductAttribute.objects.get(code='cover')
 
-attr_codes = ('additional', 'editors', 'year', 
+attr_codes = ('additional', 'editors', 'year',
         'page_count', 'translation', 'subtitle')
 
 def main(books):
     book_count = 0
     for category in books:
         try:
-            cat = Category.objects.get(name=category['title']) 
+            cat = Category.objects.get(name=category['title'])
         except Category.DoesNotExist:
             cat = series_cat.add_child(name=category['title'])
         for book in category['books']:
@@ -77,7 +82,7 @@ def main(books):
                         attribrecord.save()
                 if 'cover' in book:
                     if book['cover'].upper() == u'ПЕРЕПЛЕТ':
-                        value = hard_cover 
+                        value = hard_cover
                     else:
                         value = soft_cover
                     cover_record = ProductAttributeValue(
@@ -94,4 +99,3 @@ def main(books):
                                     display_order = 0
                                     ).save()
                     except IOError: pass
-

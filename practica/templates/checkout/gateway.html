@@ -1,0 +1,30 @@
+{% extends "checkout/checkout.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    Куда доставить заказ | {{ block.super }}
+{% endblock %}
+
+{% block checkout_login %}{% endblock %}
+{% block shipping_address %}
+{% endblock shipping_address %}
+
+{% block shipping_method %}
+    <h4 class="red">укажите куда необходимо доставить заказ</h4>
+    <div class="cart-controls-bar">
+        <span class="button big active">доставка&nbsp;<span class="icon white-arrow"></span>
+        </span><div class="label-big annotated-list"> 
+            {% include "checkout/partials/checkout_controls.html" with method_list=shipping_methods %}
+        </div>
+    </div>
+{% endblock shipping_method %}
+
+{% block payment_method %}
+{% endblock payment_method %}
+
+{% block payment_details %}
+{% endblock payment_details %}
+
+{% block place_order %}
+{% endblock place_order %}

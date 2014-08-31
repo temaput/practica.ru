@@ -1,38 +1,31 @@
-#set encoding=utf-8
+#!/usr/bin/env python
+# vi:fileencoding=utf-8
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import unicode_literals
+
 
 import logging
 log = logging.getLogger(__name__)
 
 from decimal import Decimal as D
 
-from django.utils.translation import ugettext_lazy as _
+from django.db.models import get_model
 from oscar.apps.shipping.base import Base
-from oscar.apps.shipping.methods import Free
 from apps.shipping.utils import estimateWeight
 
 
-class Pickup(Free):
-    """
-    Customer pick-up (самовывоз)
-    """
-    code = "customer-pick-up"
-    name = u"Самовывоз"
-
-
-class Express(Base):
-    code = 'express-delivery-shipping'
-    name = u"Курьер"
-    is_tax_known = True
-    charge_incl_tax = charge_excl_tax = D(300)
-
+SourceType = get_model('payment', 'SourceType')
 
 
 class RusPost(Base):
     code = 'russian-post'
-    name = u"Почта России"
+    name = "Почта России"
     is_tax_known = True
+    is_sufficient = True
     defaultCharge = D(300)
-    
+    description = ("Доставка осуществляется Почтой России ценной бандеролью"
+                   " либо посылкой")
 
     def set_shipping_addr(self, shipping_addr):
         self.set_postcode(shipping_addr)
@@ -53,9 +46,9 @@ class RusPost(Base):
         log.debug("tarifcalc found...")
 
         tarifRequest = dict(
-            Weight = estimateWeight(self.basket),
-            Valuation = self.basket.total_incl_tax_excl_discounts
-            )
+            Weight=estimateWeight(self.basket),
+            Valuation=self.basket.total_incl_tax_excl_discounts
+        )
 
         from django.conf import settings
         try:
@@ -64,22 +57,25 @@ class RusPost(Base):
             tmppath = settings.PROJECTPATH
 
         tarifConfig = {'zonesdbcfg': dict(
-            DBPATH = settings.PROJECTPATH,
-            TMPPATH = tmppath
-            )}
+            DBPATH=settings.PROJECTPATH,
+            TMPPATH=tmppath
+        )}
         if hasattr(self, 'postcode'):
             tarifRequest['To'] = self.postcode
         log.debug("tarifRequest is %s", tarifRequest)
         try:
-            charge = tarifcalc.calc(tarifRequest, tarifConfig)() 
+            charge = tarifcalc.calc(tarifRequest, tarifConfig)()
         except tarifcalc.BadTarifRequest as e:
             log.warning("Error getting RusPost charge: %s", e)
             return self.defaultCharge
-        log.debug("completed: charge = %s", charge) 
+        log.debug("completed: charge = %s", charge)
         return charge if charge else self.defaultCharge
 
     @property
     def charge_excl_tax(self):
         return self.basket_charge_incl_tax()
 
-
+    @property
+    def payment_methods_allowed(self):
+        return SourceType.objects.exclude(
+            name__iexact="наличными")

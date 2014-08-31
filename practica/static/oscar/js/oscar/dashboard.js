@@ -21,21 +21,34 @@ var oscar = (function(o, $) {
                 'timeFormat': 'HH:mm',
                 'stepMinute': 15,
                 'tinyConfig': {
+                    plugins: "template hr code link visualblocks",
+                    menubar: "edit insert view format tools",
+                    language: "ru",
+                    language_url: "/static/tinymce/langs/ru.js",
+                    style_formats: [
+                        {title: 'Заголовок', block: 'h2'},
+                        {title: 'Подзаголовок', block: 'h3'},
+                        {title: 'Плашка', block: 'div', classes: 'well red'},
+                        {title: 'Название', inline: 'span', classes: 'title'},
+                        {title: 'Формулировка', block: 'p', classes: 'dt' },
+                        {title: 'Определение', inline:'span', classes: 'dd' },
+                        {title: 'Определение мелко', inline:'span', classes: 'dd small' },
+                        {title: 'Цена крупно', block: 'div', classes: 'price-amount'},
+                        {title: 'Выделение красным', inline: 'strong', classes: 'red', styles: {color: '#ff5a56'}},
+                        {title: 'Мелко', inline: 'small'},
+                        {title: 'Мелко красным', inline: 'small', classes: 'red', styles: {color: '#ff5a56'}},
 
-    plugins: [
-        "advlist autolink lists link image charmap print preview anchor",
-        "searchreplace visualblocks code fullscreen",
-        "insertdatetime media table contextmenu paste"
-    ],
-    toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+                    ],
+                    'templates': [
+                        {title: 'Р.', description: 'Значок рубля', content: '<span class="rub">&nbsp;&#x20B7;</span>'},
+                        {title: 'Карта офиса', description: 'Карта офиса', url:'/static/tinymce/templates/ya_map.html'},
+                    ],
+                    'toolbar': "styleselect | bold italic blockquote | bullist numlist | link"
                 }
             };
-            o.dashboard.options = $.extend(defaults, options);
+            o.dashboard.options = $.extend(true, defaults, options);
 
-            o.dashboard.initDatePickers();
-            o.dashboard.initWYSIWYG();
-
-            $('.scroll-pane').jScrollPane();
+            o.dashboard.initWidgets(window.document);
 
             $(".category-select ul").prev('a').on('click', function(){
                 var $this = $(this),
@@ -50,15 +63,35 @@ var oscar = (function(o, $) {
 
             // Adds error icon if there are errors in the product update form
             $('[data-behaviour="affix-nav-errors"] .tab-pane').each(function(){
-              var productErrorListener = $(this).find('[class*="error"]').closest('.tab-pane').attr('id');
+              var productErrorListener = $(this).find('[class*="error"]:not(:empty)').closest('.tab-pane').attr('id');
               $('[data-spy="affix"] a[href="#' + productErrorListener + '"]').append('<i class="icon-info-sign pull-right"></i>');
             });
 
+            o.dashboard.filereader.init();
+        },
+        initWidgets: function(el) {
+            /** Attach widgets to form input.
+             *
+             * This function is called once for the whole page. In that case el is window.document.
+             *
+             * It is also called when input elements have been dynamically added. In that case el
+             * contains the newly added elements.
+             *
+             * If the element selector refers to elements that may be outside of newly added
+             * elements, don't limit to elements within el. Then the operation will be performed
+             * twice for these elements. Make sure that that is harmless.
+             */
+            o.dashboard.initDatePickers(el);
+            o.dashboard.initWYSIWYG(el);
+            o.dashboard.initSelects(el);
+        },
+        initSelects: function(el) {
             // Adds type/search for select fields
-            $('.form-stacked select').css('width', '95%');
-            $('.form-inline select').css('width', '300px');
-            $('select').select2({width: 'resolve'});
-            $('input.select2').each(function(i, e) {
+            var $selects = $(el).find('select').not('.no-widget-init select').not('.no-widget-init');
+            $selects.filter('.form-stacked select').css('width', '95%');
+            $selects.filter('.form-inline select').css('width', '300px');
+            $selects.select2({width: 'resolve'});
+            $(el).find('input.select2').each(function(i, e) {
                 var opts = {};
                 if($(e).data('ajax-url')) {
                     opts = {
@@ -102,14 +135,13 @@ var oscar = (function(o, $) {
                 }
                 $(e).select2(opts);
             });
-
-            o.dashboard.filereader.init();
         },
-        initDatePickers: function() {
+        initDatePickers: function(el) {
             // Use datepicker for all inputs that have 'date' or 'datetime' in the name
+            $inputs = $(el).find('input').not('.no-widget-init input').not('.no-widget-init');
             if ($.datepicker) {
                 var defaultDatepickerConfig = {'dateFormat': o.dashboard.options.dateFormat};
-                $('input[name^="date"], input[name$="date"]').each(function(ind, ele) {
+                $inputs.filter('[name^="date"], [name$="date"]').each(function(ind, ele) {
                     var $ele = $(ele),
                         config = $.extend({}, defaultDatepickerConfig, {
                             'dateFormat': $ele.data('dateformat')
@@ -123,7 +155,7 @@ var oscar = (function(o, $) {
                     'timeFormat': o.dashboard.options.timeFormat,
                     'stepMinute': o.dashboard.options.stepMinute
                 };
-                $('input[name$="datetime"]').each(function(ind, ele) {
+                $inputs.filter('[name$="datetime"]').each(function(ind, ele) {
                     var $ele = $(ele),
                         config = $.extend({}, defaultDatetimepickerConfig, {
                         'dateFormat': $ele.data('dateformat'),
@@ -136,7 +168,7 @@ var oscar = (function(o, $) {
                     'timeFormat': o.dashboard.options.timeFormat,
                     'stepMinute': o.dashboard.options.stepMinute
                 };
-                $('input[name$="time"]').not('input[name$="datetime"]').each(function(ind, ele) {
+                $inputs.filter('[name$="time"]').not('[name$="datetime"]').each(function(ind, ele) {
                     var $ele = $(ele),
                         config = $.extend({}, defaultTimepickerConfig, {
                         'timeFormat': $ele.data('timeformat'),
@@ -145,9 +177,11 @@ var oscar = (function(o, $) {
                 });
             }
         },
-        initWYSIWYG: function() {
+        initWYSIWYG: function(el) {
             // Use TinyMCE by default
-            $('form.wysiwyg textarea, textarea.wysiwyg').tinymce(o.dashboard.options.tinyConfig);
+            $textareas = $(el).find('textarea').not('.no-widget-init textarea').not('.no-widget-init');
+            $textareas.filter('form.wysiwyg textarea').tinymce(o.dashboard.options.tinyConfig);
+            $textareas.filter('.wysiwyg').tinymce(o.dashboard.options.tinyConfig);
         },
         offers: {
             init: function() {
@@ -160,6 +194,7 @@ var oscar = (function(o, $) {
                 var type = $('#id_type').val(),
                     $valueContainer = $('#id_value').parents('.control-group');
                 if (type == 'Multibuy') {
+                    $('#id_value').val('');
                     $valueContainer.hide();
                 } else {
                     $valueContainer.show();
@@ -196,14 +231,12 @@ var oscar = (function(o, $) {
                 });
             }
         },
-        promotions: {
-            init: function() {
-                $('.promotion_list').sortable({
-                    handle: '.btn-handle',
-                    stop: o.dashboard.promotions.saveOrder
-                });
+        reordering: (function() {
+            var options = {
+                handle: '.btn-handle',
+                submit_url: '#'
             },
-            saveOrder: function(event, ui) {
+            saveOrder = function(event, ui) {
                 // Get the csrf token, otherwise django will not accept the
                 // POST request.
                 var serial = $(this).sortable("serialize"),
@@ -213,13 +246,25 @@ var oscar = (function(o, $) {
                     type: 'POST',
                     data: serial,
                     dataType: "json",
-                    url: '#',
+                    url: options.submit_url,
                     beforeSend: function(xhr, settings) {
                         xhr.setRequestHeader("X-CSRFToken", csrf);
                     }
                 });
-            }
-        },
+            },
+            init = function(user_options) {
+                options = $.extend(options, user_options);
+                $(options.wrapper).sortable({
+                    handle: options.handle,
+                    stop: saveOrder
+                });
+            };
+
+            return {
+                init: init,
+                saveOrder: saveOrder
+            };
+        }()),
         search: {
             init: function() {
                 var searchForm = $(".orders_search"),

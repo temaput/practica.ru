@@ -1,0 +1,21 @@
+{% load thumbnail %}
+{% block product_image %}
+<div class="good__cover">
+    {% with image=product.primary_image %}
+    {% thumbnail image.original "195" upscale=False as thumb %}
+    <a data-ajah-ref="{% url 'catalogue:detail_ajah' product_slug=product.slug pk=product.pk %}" href="{{ product.get_absolute_url }}"><img src="{{ thumb.url }}" alt="{{ product.get_title }}" /></a>
+    {% endthumbnail %}
+    {% endwith %}
+</div>
+{% endblock %}
+
+
+{% block product_title %}
+<h3 class="good__heading"><a data-ajah-ref="{% url 'catalogue:detail_ajah' product_slug=product.slug pk=product.pk %}" href="{{ product.get_absolute_url }}">
+        <span class="good__author">{{ product.authors }}</span>
+        <br />
+        <span class="good__title">{{ product.get_title }}</span>
+        <br />
+        <span class="good__year">{{ product.attr.year }}</span>
+</a></h3>
+{% endblock %}
