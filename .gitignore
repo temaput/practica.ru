@@ -3,8 +3,6 @@
 _locale/
 staticfiles
 practica/media/
-practica/manage.py
-practica/practica/settings/dev.py
 practica/whoosh_index/
 *.sqlite3
 local_settings.py
