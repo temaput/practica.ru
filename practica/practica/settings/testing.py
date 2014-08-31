@@ -26,7 +26,7 @@ ROBOKASSA_TEST_MODE = True
 
 from os import path
 
-STATIC_ROOT = path.expanduser('~/STATIC_ROOT')
+STATIC_ROOT = '/var/nginx/STATIC_ROOT'
 
 LOG_ROOT = root('logs')
 # Ensure log root exists
