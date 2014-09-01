@@ -6,73 +6,17 @@ from django.db import models
 from oscar.core.compat import AUTH_USER_MODEL, AUTH_USER_MODEL_NAME
 
 class Migration(SchemaMigration):
-    depends_on = (
-        ('catalogue', '0001_initial'),
-        ('voucher', '0001_initial'),
-        ('offer', '0001_initial'),
-    )
 
     def forwards(self, orm):
         
-        # Adding model 'Basket'
-        db.create_table('basket_basket', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(related_name='baskets', null=True, to=orm[AUTH_USER_MODEL])),
-            ('status', self.gf('django.db.models.fields.CharField')(default='Open', max_length=128)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('date_merged', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-            ('date_submitted', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
-        ))
-        db.send_create_signal('basket', ['Basket'])
-
-        # Adding M2M table for field vouchers on 'Basket'
-        db.create_table('basket_basket_vouchers', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('basket', models.ForeignKey(orm['basket.basket'], null=False)),
-            ('voucher', models.ForeignKey(orm['voucher.voucher'], null=False))
-        ))
-        db.create_unique('basket_basket_vouchers', ['basket_id', 'voucher_id'])
-
-        # Adding model 'Line'
-        db.create_table('basket_line', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('basket', self.gf('django.db.models.fields.related.ForeignKey')(related_name='lines', to=orm['basket.Basket'])),
-            ('line_reference', self.gf('django.db.models.fields.SlugField')(max_length=128, db_index=True)),
-            ('product', self.gf('django.db.models.fields.related.ForeignKey')(related_name='basket_lines', to=orm['catalogue.Product'])),
-            ('quantity', self.gf('django.db.models.fields.PositiveIntegerField')(default=1)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-        ))
-        db.send_create_signal('basket', ['Line'])
-
-        # Adding unique constraint on 'Line', fields ['basket', 'line_reference']
-        db.create_unique('basket_line', ['basket_id', 'line_reference'])
-
-        # Adding model 'LineAttribute'
-        db.create_table('basket_lineattribute', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('line', self.gf('django.db.models.fields.related.ForeignKey')(related_name='attributes', to=orm['basket.Line'])),
-            ('option', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['catalogue.Option'])),
-            ('value', self.gf('django.db.models.fields.CharField')(max_length=255)),
-        ))
-        db.send_create_signal('basket', ['LineAttribute'])
+        # Adding field 'Line.price_incl_tax'
+        db.add_column('basket_line', 'price_incl_tax', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=12, decimal_places=2), keep_default=False)
 
 
     def backwards(self, orm):
         
-        # Removing unique constraint on 'Line', fields ['basket', 'line_reference']
-        db.delete_unique('basket_line', ['basket_id', 'line_reference'])
-
-        # Deleting model 'Basket'
-        db.delete_table('basket_basket')
-
-        # Removing M2M table for field vouchers on 'Basket'
-        db.delete_table('basket_basket_vouchers')
-
-        # Deleting model 'Line'
-        db.delete_table('basket_line')
-
-        # Deleting model 'LineAttribute'
-        db.delete_table('basket_lineattribute')
+        # Deleting field 'Line.price_incl_tax'
+        db.delete_column('basket_line', 'price_incl_tax')
 
 
     models = {
@@ -121,6 +65,7 @@ class Migration(SchemaMigration):
             'date_created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'line_reference': ('django.db.models.fields.SlugField', [], {'max_length': '128', 'db_index': 'True'}),
+            'price_incl_tax': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '12', 'decimal_places': '2'}),
             'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'basket_lines'", 'to': "orm['catalogue.Product']"}),
             'quantity': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1'})
         },
@@ -158,8 +103,10 @@ class Migration(SchemaMigration):
         'catalogue.category': {
             'Meta': {'ordering': "['name']", 'object_name': 'Category'},
             'depth': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'full_name': ('django.db.models.fields.CharField', [], {'max_length': '1024', 'db_index': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'db_index': 'True'}),
             'numchild': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
             'path': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
@@ -187,8 +134,9 @@ class Migration(SchemaMigration):
             'related_products': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'relations'", 'blank': 'True', 'to': "orm['catalogue.Product']"}),
             'score': ('django.db.models.fields.FloatField', [], {'default': '0.0', 'db_index': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'max_length': '255', 'db_index': 'True'}),
+            'status': ('django.db.models.fields.CharField', [], {'db_index': 'True', 'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'upc': ('django.db.models.fields.CharField', [], {'db_index': 'True', 'max_length': '64', 'null': 'True', 'blank': 'True'})
+            'upc': ('django.db.models.fields.CharField', [], {'max_length': '64', 'unique': 'True', 'null': 'True', 'blank': 'True'})
         },
         'catalogue.productattribute': {
             'Meta': {'ordering': "['code']", 'object_name': 'ProductAttribute'},
@@ -205,7 +153,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'ProductAttributeValue'},
             'attribute': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['catalogue.ProductAttribute']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'product': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['catalogue.Product']"}),
+            'product': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'attribute_values'", 'to': "orm['catalogue.Product']"}),
             'value_boolean': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'value_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'value_entity': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['catalogue.AttributeEntity']", 'null': 'True', 'blank': 'True'}),
