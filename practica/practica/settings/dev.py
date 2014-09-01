@@ -23,6 +23,7 @@ DEBUG_TOOLBAR_CONFIG = {
 
 ERROR_TEST = True  #this should be false after succesfull testing
 ROBOKASSA_TEST_MODE = True
+COMPRESS_ROOT = root('staticfiles')
 
 LOG_ROOT = root('logs')
 # Ensure log root exists

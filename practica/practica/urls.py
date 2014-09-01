@@ -26,9 +26,9 @@ urlpatterns = patterns('',
         # url(r'^$', RedirectView.as_view(url='/catalogue'), name='home'),
         url(r'', include(application.urls)),
     # url(r'^granatshop/', include('granatshop.foo.urls')),
-    
+
     # Robokassa integration...
-    (r'^checkout/robokassa/', include('robokassa.urls')),
+    # (r'^checkout/robokassa/', include('robokassa.urls')),
 
     # sitemap.xml
     (r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
@@ -52,7 +52,6 @@ if settings.DEBUG:
         url(r'^__debug__/', include(debug_toolbar.urls)),
     )
 
-if not settings.ON_DOMAIN:
     # Server statics and uploaded media
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)

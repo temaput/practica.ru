@@ -11,3 +11,5 @@ class SourceType(abstract_models.AbstractSourceType):
     is_defered = models.BooleanField(
         _("Defered payment"),
         help_text=_("User may pay later"), default=False)
+
+from oscar.apps.payment.models import *

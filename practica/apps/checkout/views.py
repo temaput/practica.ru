@@ -24,7 +24,6 @@ from oscar.apps.checkout.views import PaymentDetailsView \
 
 from oscar.apps.checkout.views import ThankYouView as coreThankYouView
 
-from robokassa.facade import robokassa_redirect
 from apps.shipping import models as shipping_models_module
 
 RedirectRequired, UnableToTakePayment, PaymentError = get_classes(
@@ -240,9 +239,13 @@ class PaymentDetailsView(corePaymentDetailsView):
                 email = self.request.user.email if \
                     self.request.user.is_authenticated() else \
                     self.checkout_session.get_guest_email()
-                robokassa_redirect(
-                    self.request, basket_num, total.incl_tax,
-                    Email=email, Culture='ru', order_num=order_number)
+                try:
+                    from robokassa.facade import robokassa_redirect
+                    robokassa_redirect(
+                        self.request, basket_num, total.incl_tax,
+                        Email=email, Culture='ru', order_num=order_number)
+                except ImportError:
+                    pass
             raise UnableToTakePayment(u"Данный вид платежа не поддерживается")
 
         # Request was successful - record the "payment source".  As this
