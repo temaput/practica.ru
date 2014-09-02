@@ -1,12 +1,12 @@
 from .base import *
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 from .local_settings import DATABASES
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+ALLOWED_HOSTS = ['*']
 
-MEDIA_ROOT = root('media')
 
 #
 # Debug toolbar
@@ -27,6 +27,7 @@ ROBOKASSA_TEST_MODE = True
 from os import path
 
 STATIC_ROOT = '/var/nginx/STATIC_ROOT'
+MEDIA_ROOT = '/var/nginx/MEDIA_ROOT'
 
 LOG_ROOT = root('logs')
 # Ensure log root exists
@@ -96,7 +97,7 @@ LOGGING = {
     },
     'root': {  # all other loggers
         'handlers': ['console'],
-        'level': 'DEBUG',
+        'level': 'ERROR',
         },
     'loggers': {  # the are the loggers that correspond to getLogger(name)
         'django': {  # correspond to getLogger('django')
@@ -132,7 +133,7 @@ LOGGING = {
         'robokassa': {
             'handlers':['console'],
             'propagate': False,
-            'level': 'DEBUG'
+            'level': 'INFO'
             },
         'tarifcalc': {
             'handlers': ['console'],
@@ -142,7 +143,7 @@ LOGGING = {
         'catalogue': {
             'handlers': ['console'],
             'propagate': False,
-            'level': 'DEBUG'
+            'level': 'ERROR'
             },
         # suppress output of this debug toolbar panel
         'template_timings_panel': {  # this has something to do with django debug panel

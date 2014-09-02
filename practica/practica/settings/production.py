@@ -2,36 +2,18 @@ from .base import *
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
-ON_DOMAIN = True
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'granat-site_granatshop',                      # Or path to database file if using sqlite3.
-        'USER': '045535102_django',                      # Not used with sqlite3.
-        'PASSWORD': get_env('PRACTICA_MYSQL_PASSWORD'),                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
+from .local_settings import DATABASES
 
-# Absolute filesystem path to the directory that will hold user-uploaded files.
-# Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT =  ondomain('media')
-
-# Absolute path to the directory static files should be collected to.
-# Don't put anything in this directory yourself; store your static files
-# in apps' "static/" subdirectories and in STATICFILES_DIRS.
-# Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ondomain('static')
+STATIC_ROOT = '/var/nginx/STATIC_ROOT'
+MEDIA_ROOT = '/var/nginx/MEDIA_ROOT'
 
 # Dunno if it works, need checking
-TEMP = '/tmp/mc-granat-site'
 SEND_BROKEN_LINK_EMAILS = True
 
 
-ALLOWED_HOSTS = ['.{}'.format(DOMAIN)]
+ALLOWED_HOSTS = ['*']
 
 #
 # ANALITICS
@@ -168,5 +150,3 @@ LOGGING = {
         }
     }
 }
-
-
