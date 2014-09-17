@@ -485,6 +485,7 @@ var practica = (function practica_namespace(o, $) {
         $(window).load(function(){ $("body").addClass("loaded") })
 
     }
+    o.Tab = Tab
 
     return o
 

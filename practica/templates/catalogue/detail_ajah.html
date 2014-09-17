@@ -59,18 +59,18 @@
         <div class="toggle">
             <ul class="toggle-controls">
                 {% if product.description %}
-                <li><a href="" data-toggle="annotation">описание</a></li>
+                <li class="active"><a href="" data-toggle="annotation">описание</a></li>
                 {% endif %}
                 {% if product.contents %}
-                <li class="active"><a href="" data-toggle="contents" >оглавление</a></li>
+                <li ><a href="" data-toggle="contents" >оглавление</a></li>
                 {% endif %}
             </ul>
             <ul class="footer__body toggle-body">
                 {% if product.description %}
-                <li data-toggle="annotation"><p>{{ product.description|safe }}</p></li>
+                <li class="active" data-toggle="annotation"><p>{{ product.description|safe }}</p></li>
                 {% endif %}
                 {% if product.contents %}
-                <li class="active" data-toggle="contents"><p>{{ product.contents|safe }}</p></li>
+                <li data-toggle="contents"><p>{{ product.contents|safe }}</p></li>
                 {% endif %}
             </ul>
         </div>
