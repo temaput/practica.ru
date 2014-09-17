@@ -98,7 +98,7 @@ class ShippingAddressView(core_views.ShippingAddressView):
                 self.checkout_session.shipping_method_code(
                     self.request.basket))
             for fname in ('line4', 'line1', 'line2', 'line3',
-                          'postcode', 'country'):
+                          'postcode'):
                 if getattr(shipping_method, fname, None):
                     exclude_fields.append(fname)
 
