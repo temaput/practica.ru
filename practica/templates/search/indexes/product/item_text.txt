@@ -1,3 +1,6 @@
 {{ object.upc|default:"" }}
 {{ object.title }}
+{{ object.authors|default:"" }}
+{{ object.contents|default:"" }}
 {{ object.description|default:"" }}
+{{ object.attribute_summary|default:"" }}
