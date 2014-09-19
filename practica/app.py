@@ -6,7 +6,6 @@ from apps.checkout.app import application as checkout_app
 from apps.promotions.app import application as promo_app
 
 
-
 class Main(Shop):
     # Use local checkout app so we can mess with the view classes
     checkout_app = checkout_app
@@ -16,9 +15,12 @@ class Main(Shop):
         urlpatterns = super(Main, self).get_urls()
         # urlpatterns += patterns('',
         #        url(r"^invoice/", include(self.invoice_app.urls)))
+        urlpatterns += patterns(
+            '',
+            url(r"^[Bb]ooks/", include('oldsite_swapper.urls'))
+        )
 
         return urlpatterns
-
 
 
 application = Main()
