@@ -8,9 +8,15 @@
         <ul class="nav">
             {% category_tree depth=1 parent=1 as tree_categories %}
             {% if tree_categories %}
-            {% for tree_category, info in tree_categories %}
-            <li><a href="{{ tree_category.get_absolute_url }}">{{ tree_category.name|lower }}</a></li>
-            {% endfor %}
+                {% for tree_category, info in tree_categories %}
+                    <li>
+                    {% if tree_category.pk == category.pk %}
+                        <span class="selected-category">{{ tree_category.name|lower }}</span>
+                        {% else %}
+                        <a href="{{ tree_category.get_absolute_url }}">{{ tree_category.name|lower }}</a>
+                    {% endif %}
+                    </li>
+                {% endfor %}
             {% endif %}
         </ul>
         {% endblock %}
