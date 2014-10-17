@@ -654,6 +654,14 @@ Main page styles
     margin: 0 0 16px 0;
     padding: 1px 0 0;
 
+    .show-all {
+        position: relative;
+        left: 50%;
+        a {
+            color: @red;
+        }
+    }
+
 }
 
 .nav-control {
@@ -692,6 +700,66 @@ Main page styles
         font: 17px/1 @Circe-bold;
     }
 }  
+
+
+// EXPANDED NAV
+
+.nav__container.expanded {
+    position: relative;
+    margin: 0 0 16px 0;
+    padding: 1px 0 0;
+    .show-all {
+        display: none;
+    }
+    .nav-control {
+        display: none;
+    }
+    .nav__container-inner {
+        overflow: visible;
+        position: relative;
+        padding: 0;
+        margin:  0;
+        border-top: none;
+        border-bottom: none;
+
+    }
+    .nav {
+        .clearfix();
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        border-bottom: 1px solid red;
+        width: 100%;
+
+        li {
+            position: relative;
+            left: -1px;
+            list-style: none;
+            float:left;
+            padding: 5px 10px;
+            width: 175px;
+            min-height: 35px;
+            text-align: center;
+            border-left: 1px red dashed;
+            margin: 0;
+            &:before {
+                content: "";
+                top: 0;
+                position: absolute;
+                width: 9999px;
+                left: -800px;
+                border-top: solid 1px red;
+            }
+            a {
+
+                text-decoration: none;
+            }
+        }
+    }  
+
+
+}
 
 
 //Carousel

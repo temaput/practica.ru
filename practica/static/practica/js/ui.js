@@ -482,6 +482,15 @@ var practica = (function practica_namespace(o, $) {
         var book_grid = new BookGrid($(".goods"))
         console.log("BasketDisplay load...")
         new BasketDisplay($(".sub__cart>.cart"))
+
+        // init simple events
+        console.log("initializing show-all ")
+        $(".show-all>a").click(function(event) {
+            console.log("fire show-all")
+            event.preventDefault()
+            $(".nav__container").addClass("expanded")
+        })
+
         $(window).load(function(){ $("body").addClass("loaded") })
 
     }
