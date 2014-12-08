@@ -657,6 +657,7 @@ Main page styles
     .show-all {
         position: relative;
         left: 50%;
+        width: 200px;
         a {
             color: @red;
         }
@@ -691,7 +692,10 @@ Main page styles
     position: relative;
     width: 9999px;
     left: 0;
-    .transition (left ease 4.6s);
+
+    &.transition {
+        .transition (left ease .6s);
+    }
 
     li {
         float: left;
@@ -741,6 +745,7 @@ Main page styles
             width: 175px;
             min-height: 35px;
             text-align: center;
+            line-height: 25px;
             border-left: 1px red dashed;
             margin: 0;
             &:before {
@@ -753,6 +758,9 @@ Main page styles
             }
             a {
 
+                display: inline-block;
+                vertical-align: middle;
+                line-height: 17px;
                 text-decoration: none;
             }
         }

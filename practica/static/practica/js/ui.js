@@ -27,7 +27,17 @@ var practica = (function practica_namespace(o, $) {
 
         load_from_tag: function(template_id) {
             this.template = $("#" + template_id).html()
-            Mustache.parse(this.template)
+            try {
+            this.Mustache = Mustache
+            this.Mustache.parse(this.template)
+            }
+            catch(e) {
+                if (e instanceof ReferenceError) {
+                    console.log("Mustache not found")
+                    this.Mustache = undefined
+                }
+                
+            }
             return this
         },
 
@@ -42,7 +52,7 @@ var practica = (function practica_namespace(o, $) {
 
         render_context: function() {
             // should be redefined
-            return Mustache.render(this.template, this.context)
+            return this.Mustache && this.Mustache.render(this.template, this.context)
         }
     }
 
@@ -99,14 +109,16 @@ var practica = (function practica_namespace(o, $) {
 
     var Navigator = function(element, options) {
         this.$element = $(element)
+        this.$container = this.$element.parents(".nav__container")
         this.options = $.extend({}, Navigator.defaults, options)
         this.prev_offsets = []
         this.current_offset = 0
+        this.sliding = false
 
         //init controls
 
         var that = this
-        this.$element.parents(".nav__container").on(
+        this.$container.on(
             "click.navigator",
             ".nav-control",
             function(e){
@@ -114,46 +126,184 @@ var practica = (function practica_namespace(o, $) {
                 var $this = $(this)
                 var action = $this.data("slide")
                 that[action]()
-            })
+            }
+        )
+        //initializing show-all
+        this.$container.find(".show-all>a").click(
+            $.proxy(function(event) {
+            console.log("fire show-all")
+            event.preventDefault()
+            this.show_all()
+        }, this)
+        )
+
+
+        // slide to current item if there is one
+        this.check_current_state()
+
 
     }
     Navigator.defaults = {
-        duration: 600
+        duration: 600,
+        step: 3,
+        margin: 5,
+        max_items_display: 8,
+        transitionClass: "transition",
     }
     Navigator.prototype = {
-        get_right_border:  function(){
-            var $inner_container = this.$element.closest("div")
-            return $inner_container.position().left + $inner_container.width() - this.current_offset
+
+        show_all: function() {
+            this.$element.queue(
+                $.proxy(function() {
+                this.$element.css({left:0})
+                this.$container.addClass("expanded")
+            }, this)
+            )
+        },
+
+        get_next_right: function(step) {
+            var container_width = this.$element.closest(".nav__container-inner").width()
+            var nav_position = this.$element.position().left
+            return this.$element.children("li").filter(function(index){
+                var $this = $(this)
+                return nav_position + Math.round($this.position().left) + $this.width() > container_width
+            }).slice(0, step)
+        },
+        get_next_left: function(step) {
+            var nav_position = this.$element.position().left
+            return this.$element.children("li").filter(function(index){
+                var $this = $(this)
+                return nav_position + Math.round($this.position().left) < 0
+            }).slice(-step)
+        },
+        get_copy_items: function(side, step) {
+            if (side == "left") {
+                return this.$element.children("li").slice(0, step)
+            }
+            return this.$element.children("li").slice(-step)
+        },
+        get_items_length: function($items) {
+            var length = 0
+            $items.each(function(index) { 
+                length += $(this).outerWidth(true)
+            })
+            return length
+        },
+        calculate_offset: function($next_items, direction) {
+            var el_position = this.$element.position().left
+            var container_width = this.$element.closest(".nav__container-inner").width()
+            if (direction == "left") {
+                var $last_item = $next_items.last()
+                var offset = -($last_item.position().left + $last_item.outerWidth(false) + 
+                    el_position - container_width) - this.options.margin
+            } else if (direction == "right") {
+                var $first_item = $next_items.first()
+                var offset = -($first_item.position().left + el_position) + this.options.margin
+            } else if (direction == "center") {
+                var center_position = container_width / 2
+                var offset = center_position - $next_items.first().position().left - el_position
+            }
+            return offset
+        },
+        next: function() {
+            if (!this.$element.queue().length)
+                return this.turn("left")
+        },
+        prev: function() {
+            if (!this.$element.queue().length)
+                return this.turn("right")
+        },
+        check_current_state: function() {
+            var $current_item = this.$element.children(".current")
+            if ($current_item.length)
+                this.slide_to($current_item)
+        },
+        slide_to: function($item) {
+            //place some certain slide in the center
+            var offset = this.calculate_offset($item, "center")
+            var direction = offset > 0 ? "right": "left"
+            var opposite = direction == "right" ? "left": "right"
+            this.slide(offset)
+            this.$element.queue($.proxy(function() {
+                var step = Math.floor(this.options.max_items_display/2)
+                var $next_items = this["get_next_"+ opposite](step) 
+                if ($next_items.length < step) {
+                    var $copy_items = this.get_copy_items(direction, step)
+                    var copy_items_length = this.get_items_length($copy_items)
+                    $next_items = this["add_to_" + opposite]($copy_items, copy_items_length)
+                    this["remove_from_" + direction]($copy_items, copy_items_length)
+                }
+                this.$element.dequeue()
+            }, this))
+            return this
+
+        },
+        turn: function(direction, step) {
+            step = step || this.options.step
+            var opposite = direction == "right" ? "left": "right"
+            var copy_items_length = 0
+            var $next_items = this["get_next_"+ opposite](step) 
+            if ($next_items.length < step) {
+                var $copy_items = this.get_copy_items(direction, step)
+                copy_items_length = this.get_items_length($copy_items)
+                $next_items = this["add_to_" + opposite]($copy_items, copy_items_length)
+            }
+            //get offset: find right/leftmost border of next items and calculate difference
+            var offset = this.calculate_offset($next_items, direction)
+            // shift row 
+            this.slide(offset)
+            //get rid of copy_items
+            if (copy_items_length) 
+                this["remove_from_" + direction]($copy_items, copy_items_length)
+            return this
+        },
+
+        remove_from_left: function($items, items_length) {
+            this.$element.queue(function() {
+                $(this).css({left: "+=" + items_length})
+                $items.remove()
+                console.log("Sliding is over")
+                $(this).dequeue()
+            })
+        },
+        remove_from_right: function($items) {
+            this.$element.queue(function() {
+                $items.remove()
+                console.log("Sliding is over")
+                $(this).dequeue()
+            })
+        },
+
+        add_to_left: function($items, items_length) {
+            this.$element.css({"left": "-=" + items_length})
+            return $items.clone().prependTo(this.$element)
+        },
+        add_to_right: function($items) {
+            return $items.clone().appendTo(this.$element)
+        },
+
+
+        slide: function(offset){
+            if (offset == 0) return this
+            var className = this.options.transitionClass
+            if (Modernizr.csstransitions) {
+                this.$element.queue(function() {
+                    $(this).addClass(className)
+                    .one(transEndEventName, function(){
+                        $(this).removeClass(className)
+                        .dequeue()
+                    })
+                    .css({left: "+=" + offset})
+
+                })
+
+            } else {
+                this.$element.animate({left: "+=" + offset})
+
+            }
+            return this
+
         }
-                       ,  get_rightmost_item: function(){
-                   var right_border = this.get_right_border()
-                   return this.$element.children("li").filter(function(index){
-                       var $this = $(this)
-                       return $this.position().left + $this.width() > right_border
-                   }).first()
-                       }
-                       , next: function(){
-                   var $rightmost = this.get_rightmost_item()
-                   if (!$rightmost.length) return
-                       var shift = -($rightmost.position().left)
-                   this.current_offset && this.prev_offsets.push(this.current_offset) 
-                   return this.slide(shift)
-                       } 
-                       , prev: function(){
-                   var unshift = this.prev_offsets.pop() || 0
-                   return this.slide(unshift)
-                       }
-                       , slide: function(shift){
-                   this.current_offset = shift
-                   if (Modernizr.csstransitions) {
-                       this.$element.css({left: shift})
-
-                   } else {
-                       this.$element.animate({left: shift}, this.options.duration)
-                   }
-                   return this
-
-                       }
     }
 
 
@@ -474,6 +624,7 @@ var practica = (function practica_namespace(o, $) {
         _init && _init()
         console.log("Navigator load...")
         var navigator = new Navigator($("ul.nav"))
+        o.Navigator = navigator
         console.log("Carousel load...")
         var carousel = new Carousel($('.carousel').get())
         console.log("Login form load...")
@@ -484,12 +635,6 @@ var practica = (function practica_namespace(o, $) {
         new BasketDisplay($(".sub__cart>.cart"))
 
         // init simple events
-        console.log("initializing show-all ")
-        $(".show-all>a").click(function(event) {
-            console.log("fire show-all")
-            event.preventDefault()
-            $(".nav__container").addClass("expanded")
-        })
 
         $(window).load(function(){ $("body").addClass("loaded") })
 

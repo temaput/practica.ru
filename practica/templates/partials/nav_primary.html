@@ -9,7 +9,7 @@
             {% category_tree depth=1 parent=1 as tree_categories %}
             {% if tree_categories %}
                 {% for tree_category, info in tree_categories %}
-                    <li>
+                    <li {% if tree_category.pk == category.pk %}class="current"{% endif %}>
                     {% if tree_category.pk == category.pk %}
                         <span class="selected-category">{{ tree_category.name|lower }}</span>
                         {% else %}
