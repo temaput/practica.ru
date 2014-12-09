@@ -128,6 +128,11 @@ var practica = (function practica_namespace(o, $) {
                 that[action]()
             }
         )
+
+        //init gestures
+        var gestures = new Hammer(this.$element.get(0))
+        gestures.on("panleft", $.proxy(this.next, this))
+        gestures.on("panright", $.proxy(this.prev, this))
         //initializing show-all
         this.$container.find(".show-all>a").click(
             $.proxy(function(event) {
