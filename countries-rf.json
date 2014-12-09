@@ -1,0 +1,14 @@
+[
+    {
+        "pk": "RU", 
+        "model": "address.country", 
+        "fields": {
+            "iso_3166_1_a3": "RUS", 
+            "name": "RUSSIAN FEDERATION", 
+            "printable_name": "Российская Федерация", 
+            "display_order": 0, 
+            "iso_3166_1_numeric": 643, 
+            "is_shipping_country": true
+        }
+    } 
+    ]
