@@ -24,7 +24,7 @@
 {% block content %}
     <div class="goods">
         <div class="opened">
-            <article class="details">
+            <article itemscope itemtype="http://schema.org/Product" class="details">
                 <header>
                     <div class="social"> 
                         <a href=""><span class="icon social-f"></span></a>
@@ -33,14 +33,14 @@
                     <div class="series"><a href="{{ product.serie.get_absolute_url }}">{{ product.serie.name }}</a></div>
                 </header>
                 <div class="main">
-                    <div class="cover"><img src="{{ product.primary_image.original.url }}" alt="{{ product.get_title }}" /></div>
+                    <div class="cover"><img src="{{ product.primary_image.original.url }}" itemprop="image" alt="{{ product.get_title }}" /></div>
                     {% block product_main %}
                         <div class="description">
                             <div class="colophon">
                                 {% if user.is_authenticated and user.is_staff %}
                                     <a class="edit" href="{% url 'dashboard:catalogue-product' pk=product.id %}"><small>Редактировать</small></a>
                                 {% endif %}
-                                <h1>{{ product.get_title }}</h1>
+                                <h1 itemprop="name">{{ product.get_title }}</h1>
                                 <h2 class="authors">{{ product.authors }}</h2>
                                 {% if product.attr.editors %}
                                     <h2>{{ product.attr.editors }}</h2>
@@ -57,7 +57,7 @@
                                 <span class="musthave">{{ product.stockrecord.partner.name }}, {{ product.attr.year }}.</span>
                                 </p>
                             </div>
-                            <div class="details__controls">
+                            <div class="details__controls" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
                                 {% block product_stock_record %}
                                     {% include "catalogue/partials/stock_record.html" with verbose=1 %}
                                 {% endblock %}
@@ -81,7 +81,7 @@
                             </ul>
                             <ul class="footer__body toggle-body">
                                 {% if product.description %}
-                                    <li class="active" data-toggle="annotation"><p>{{ product.description|safe }}</p></li>
+                                    <li class="active" data-toggle="annotation" itemprop="description">{{ product.description|safe }}</li>
                                 {% endif %}
                                 {% if product.contents %}
                                     <li data-toggle="contents"><p>{{ product.contents|safe }}</p></li>

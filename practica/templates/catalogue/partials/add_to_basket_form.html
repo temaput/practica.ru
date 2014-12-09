@@ -6,11 +6,13 @@
 {% basket_form request product as basket_form %}
 
 {% if session.availability.is_available_to_buy %}
+    <link itemprop="availability" href="http://schema.org/InStock">
 <form  action="{% url 'basket:add' %}" class="add-to-basket" method="post">
     {% include "catalogue/partials/add_to_basket_form_core.html" %}
 </form>
 {# {% include "catalogue/partials/add_to_wishlist.html" %} #}
 {% else %}
+    <link itemprop="availability" href="http://schema.org/OutOfStock">
     {% if has_active_alert %}
         <p>{% trans "You have an active stock alert for this product." %}</p>
     {% else %}

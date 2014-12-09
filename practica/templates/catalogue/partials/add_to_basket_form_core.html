@@ -1,5 +1,6 @@
 {% load basket_tags %}
 {% load i18n %}
+{% load l10n %}
 {% load purchase_info_tags %}
 
 {% purchase_info_for_product request product as session %}
@@ -8,21 +9,26 @@
 {{ basket_form.product_id }}
 {{ basket_form.non_field_errors }}
 {% with quant=basket_form.quantity %}
-<div class="amount">
-    <label for="id_quantity">пожалуйста, укажите<br>
-        количество экземпляров:</label><input type="text" id="{{ quant.id_for_label }}"  name="{{ quant.html_name }}" class="amount__input" value="1"/>
-    {{ quant.errors }}
-</div>
+    <div class="amount">
+        <label for="id_quantity">пожалуйста, укажите<br>
+            количество экземпляров:</label><input type="text" id="{{ quant.id_for_label }}"  name="{{ quant.html_name }}" class="amount__input" value="1"/>
+        {{ quant.errors }}
+    </div>
 {% endwith %}
+{% localize off %}
 <div class="price">
     {% if session.price.exists %}
-    <div class="label-big">
+        <div class="label-big">
             {% if session.price.is_tax_known %}
-            <span class="price-amount">{{ session.price.incl_tax|floatformat:"0" }}
-            {% else %}
-            <span class="price-amount">{{ session.price.excl_tax|floatformat:"0" }}
-            {% endif %}
-            <span class="rub">&#x20B7;</span></span>
-    </div>{% endif %}<button name="send" type="submit" class="big active" value="купить">купить
-                    <span class="icon white-arrow"></span></button><div class="messages big"></div>
-</div>
+                <meta itemprop="price" content="{{ session.price.incl_tax }}">
+                <span class="price-amount">{{ session.price.incl_tax|floatformat:"0" }}
+                    {% else %}
+                    <meta itemprop="price" content="{{ session.price.excl_tax }}">
+                    <span class="price-amount">{{ session.price.excl_tax|floatformat:"0" }}
+                    {% endif %}
+                    <span class="rub">&#x20B7;</span></span>
+                <meta itemprop="priceCurrency" content="RUB">
+        </div>{% endif %}<button name="send" type="submit" class="big active" value="купить">купить
+            <span class="icon white-arrow"></span></button><div class="messages big"></div>
+    </div>
+    {% endlocalize %}
