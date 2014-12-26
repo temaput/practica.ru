@@ -1,14 +1,20 @@
 <!-- login form -->
 <form id="login_form" action="{% url 'customer:login' %}" method="post" class="well">
-                {% csrf_token %}
+    {% csrf_token %}
 
-  <button class="form-title" type="submit" name="login_submit"><span class="icon enter-invert"></span><span class="text">войти</span></button>
-  <a class="form-close" href=""><span class="icon x-white"></span></a>
-  <div class="form-body">
-    <input type="text" name="login-username" id="id_login-username" placeholder="e-mail:" />
-    <input type="password" name="login-password" id="id_login-password" placeholder="пароль:" />
-    <input type="hidden" name="next" value="{{ login_next }}" />
-    <button type="submit" name="login_submit"><span class="icon enter-invert"></span></button>
-  </div>
-  <a href="{% url 'password-reset' %}">Я забыл пароль</a>
+    <div class="form-head-fail hidden">
+        <span class="icon enter-invert"></span><span class="text">неправильный логин или пароль</span>
+        <a class="form-close" href=""><span class="icon x-white"></span></a>
+    </div>
+    <div class="form-head">
+        <button class="form-title" type="submit" name="login_submit"><span class="icon enter-invert"></span><span class="text">войти</span></button>
+        <a class="form-close" href=""><span class="icon x-white"></span></a>
+    </div>
+    <div class="form-body">
+        <input type="text" name="login-username" id="id_login-username" placeholder="e-mail:" />
+        <input type="password" name="login-password" id="id_login-password" placeholder="пароль:" />
+        <input type="hidden" name="next" value="{{ login_next }}" />
+        <button type="submit" name="login_submit"><span class="icon enter-invert"></span></button>
+    </div>
+    <a href="{% url 'password-reset' %}">я забыл пароль</a>
 </form>  
