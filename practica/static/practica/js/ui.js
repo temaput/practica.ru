@@ -17,7 +17,6 @@ var practica = (function practica_namespace(o, $) {
     var Template = function(template, context) {
         if (template) {
             this.template = template
-            Mustache.parse(this.template)
         }
         this.context = context || {}
 
@@ -27,17 +26,6 @@ var practica = (function practica_namespace(o, $) {
 
         load_from_tag: function(template_id) {
             this.template = $("#" + template_id).html()
-            try {
-            this.Mustache = Mustache
-            this.Mustache.parse(this.template)
-            }
-            catch(e) {
-                if (e instanceof ReferenceError) {
-                    console.log("Mustache not found")
-                    this.Mustache = undefined
-                }
-                
-            }
             return this
         },
 
@@ -52,7 +40,15 @@ var practica = (function practica_namespace(o, $) {
 
         render_context: function() {
             // should be redefined
-            return this.Mustache && this.Mustache.render(this.template, this.context)
+            try {
+                return Mustache.render(this.template, this.context)
+            }
+            catch(e) {
+                if (e instanceof ReferenceError) {
+                    console.log("Mustache not found")
+                }
+                
+            }
         }
     }
 

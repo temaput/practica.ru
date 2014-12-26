@@ -5,6 +5,33 @@
     {{ flatpage.title}} | {{ block.super }}
 {% endblock %}
 
+{% block toplinks %}
+    <div class="conditions">
+        {% if not flatpage.url == '/shipping/' %}
+            <a href="/shipping/"><span class="icon delivery"></span><span class="text">доставка</span></a>
+        {% else %}
+            <span class="icon delivery inactive"></span><span class="text inactive">доставка</span>
+        {% endif %}
+        {% if not flatpage.url == '/payment/' %}
+            <a href="/payment/"><span class="icon payment"></span><span class="text">оплата</span></a>
+        {% else %}
+            <span class="icon payment inactive"></span><span class="text inactive">оплата</span>
+        {% endif %}
+    </div>
+    <div class="about">
+        {% if not flatpage.url == '/about/' %}
+            <a href="/about/"><span class="icon info"></span><span class="text">издательство</span></a>
+        {% else %}
+            <span class="icon info inactive"></span><span class="text inactive">издательство</span>
+        {% endif %}
+        {% if not flatpage.url == '/contact/' %}
+        <a href="/contact/"><span class="icon envelope"></span><span class="text">контакты</span></a>
+        {% else %}
+            <span class="icon envelope inactive"></span><span class="text inactive">контакты</span>
+        {% endif %}
+    </div>
+{% endblock %}
+
 {% block headertext %}
     <span class="text">{{ flatpage.title }}</span>
 {% endblock %}

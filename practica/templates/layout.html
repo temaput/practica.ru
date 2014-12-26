@@ -4,7 +4,27 @@
 
 {% block layout %}
     {# Top-horizontal bar with account, notifictions, dashboard links #}
-    {% include "partials/nav_accounts.html" %}
+    {% block topbar %}
+        <div class="topbar">
+            {% block social %}
+            <div class="social">
+                <a href="https://www.facebook.com/practica.publ"><span class="icon social-f"></span>139</a>
+                <a href="http://vk.com/practica.publ"><span class="icon social-b"></span>892</a>
+            </div>
+            {% endblock %}
+            {% include "partials/nav_accounts.html" %}
+            {% block toplinks %}
+                <div class="conditions">
+                    <a href="/shipping/"><span class="icon delivery"></span><span class="text">доставка</span></a>
+                    <a href="/payment/"><span class="icon payment"></span><span class="text">оплата</span></a>
+                </div>
+                <div class="about">
+                    <a href="/about/"><span class="icon info"></span><span class="text">издательство</span></a>
+                    <a href="/contact/"><span class="icon envelope"></span><span class="text">контакты</span></a>
+                </div>
+            {% endblock %}
+        </div>
+    {% endblock %}
 
     {# Site logo/title, mini-basket, browse dropdown and searchbox #}
     <header>

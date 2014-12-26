@@ -186,6 +186,7 @@ h1 {
         color: white;
         //display: inline-block;
         padding: 0 15px 5px ;
+        text-transform: lowercase;
     }
     .text.blue {
         background: @blue;
@@ -466,8 +467,14 @@ Main page styles
     padding: 0;
     max-width: 1260px;
     min-width: 825px;
-    a {
+    .text {
         font: 14px @Circe;
+        &.inactive {
+            color: @grey;
+            border-bottom: solid 1px @grey;
+            margin-right: 8px;
+        }
+
     }
     div {
         display: block;
@@ -475,7 +482,7 @@ Main page styles
         a:first-child {
             margin-right: 8px;
         }
-        a .text {
+        .text {
             border-bottom: solid 1px @red;
         }
 
@@ -483,7 +490,7 @@ Main page styles
     .social {
         min-width: 200px;
         width: 32.2%;
-        a {
+        .text {
             font-size: 9px;
         }
     }
@@ -593,6 +600,7 @@ Main page styles
                 margin:0;
                 margin-top:24px;
                 background: none;
+                font: 12px @Circe;
                 &::-webkit-input-placeholder { /* WebKit browsers */
                     color:    grey;
                     opacity:  0.4;
@@ -660,6 +668,7 @@ Main page styles
         width: 200px;
         a {
             color: @red;
+            font: 12px @Circe;
         }
     }
 
@@ -702,6 +711,9 @@ Main page styles
         display: block;
         margin: 2px 35px 0 0;
         font: 17px/1 @Circe-bold;
+        &.current {
+            color: @grey;
+        }
     }
 }  
 
@@ -867,6 +879,31 @@ Main page styles
     }
 }
 
+//Messages (ajax)
+
+    .basket-status {
+        &>.top-line {
+            display: block;
+            text-align: center;
+            font: 14px @Circe-bold;
+            color: white;
+            background: @blue;
+        }
+        &>.bottom-line {
+            display: block;
+            border: 1px solid @blue;
+            padding: 0 8px;
+            a {
+                font: 20px @Circe-ExtraBold;
+                color: @blue;
+            }
+
+        }
+    }
+    .messages.small {
+        margin: 15px 0;
+    }
+
 //Books
 .goods-cutter {
     overflow: hidden;
@@ -995,37 +1032,14 @@ Main page styles
             margin-left: 8px;
         }
     }
-    .price {
-        div {
+    .price > div {
             display: inline-block;
             vertical-align: top;
         }
 
-    } 
 
 
 
-    .messages.big {
-        .basket-status {
-            .top-line {
-                display: block;
-                text-align: center;
-                font: 14px @Circe-bold;
-                color: white;
-                background: @blue;
-            }
-            .bottom-line {
-                display: block;
-                border: 1px solid @blue;
-                padding: 0 8px;
-                a {
-                    font: 20px @Circe-ExtraBold;
-                    color: @blue;
-                }
-
-            }
-        }
-    }
 
 
     .description {
