@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% load thumbnail %}
 {% load basket_tags %}
 {% load promotion_tags %}
 {% load category_tags %}
@@ -15,7 +16,11 @@
         {% for h in highlights %}
             <li class="{% if forloop.first %}active {% elif forloop.last %}prev {% elif forloop.counter == 2 %}next {% endif %}">
 
-            <a href="{{ h.get_absolute_url }}"><img src="{{ h.primary_image.original.url }}" alt="{{ h.get_title }}" /></a>
+            <a href="{{ h.get_absolute_url }}">
+                        {% thumbnail h.primary_image.original "615x434" upscale=False as thumb %}
+                        <img style="height: 434px; width: 615px" src="{{ thumb.url }}" alt="{{ h.get_title }}" />
+                        {% endthumbnail %}
+            </a>
 
                 <hgroup>
                 <h2>{{ h.slogan }}</h2>
