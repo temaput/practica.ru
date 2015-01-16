@@ -18,3 +18,13 @@ class PracticaHomeView(ListView):
         return Category.objects.get(
             slug=settings.HOME_PAGE_CATEGORY_SLUG).product_set.order_by(
             "title")
+
+    def get_context_data(self, **kwargs):
+        context = super(PracticaHomeView, self).get_context_data(**kwargs)
+        context['highlights'] = self.get_highlights()
+        return context
+
+    def get_highlights(self):
+        banners_category = Category.objects.get(
+            name=settings.HOME_BANNERS_CATEGORY_NAME)
+        return banners_category.product_set.all()
