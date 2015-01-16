@@ -13,9 +13,10 @@
     {% if highlights %}
     <ul class="carousel large">
         {% for h in highlights %}
-            <li class="{% if forloop.first %}active {% elif forloop.last %}previous {% elif forloop.counter == 2 %}next {% endif %}">
+            <li class="{% if forloop.first %}active {% elif forloop.last %}prev {% elif forloop.counter == 2 %}next {% endif %}">
 
-                <a href="{{ h.get_absolute_url }}"><img src="{{ h.primary_image.original.url }}" alt="{{ h.get_title }}" />
+            <a href="{{ h.get_absolute_url }}"><img src="{{ h.primary_image.original.url }}" alt="{{ h.get_title }}" /></a>
+
                 <hgroup>
                 <h2>{{ h.slogan }}</h2>
                 </hgroup>
@@ -23,6 +24,8 @@
                     <a href="{{h.get_absolute_url}}" class="carousel__details"><span class="icon plus"></span><span class="text">подробнее</span></a>
                 {% endif %}
             </li>
+        {% endfor %}
+
             {% comment %}
         <li class="next">
         <img src="http://s24.postimg.org/inmlaevxx/globus.jpg" alt="" />
@@ -61,7 +64,6 @@
         <a href="#" class="carousel__details"><span class="icon plus"></span><span class="text">подробнее</span></a>
         </li>
         {% endcomment %}
-        {% endfor %}
     </ul>
     {% endif %}
     <div class="carousel-control-container">
