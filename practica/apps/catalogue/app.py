@@ -7,6 +7,7 @@ from . import views
 
 class BaseCatalogueApplication(CoreCatApp):
     detail_ajah = views.ProductDetailAjah
+    category_view = views.ProductCategoryView
 
     def get_urls(self):
         urlpatterns = super(BaseCatalogueApplication, self).get_urls()
