@@ -36,6 +36,7 @@ class ProductCategory(AbstractProductCategory):
 
     priority = models.IntegerField(u'Приоритет', default=99,
                                    choices=PRIORITY_CHOICES,
+                                   blank=False,
                                    )
 
 
