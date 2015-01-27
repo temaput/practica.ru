@@ -16,8 +16,27 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
-from oscar.apps.catalogue.abstract_models import AbstractProduct
+from oscar.apps.catalogue.abstract_models import (AbstractProduct,
+                                                  AbstractProductCategory)
 series_name = 'Серии'
+
+
+# Customizing productcategory model for prioritizing
+
+
+class ProductCategory(AbstractProductCategory):
+    MAIN = 1
+    SUBCATEGORY = 2
+    DEFAULT = 99
+    PRIORITY_CHOICES = (
+        (MAIN, u'Основная рубрика'),
+        (SUBCATEGORY, u'Дополнительная рубрика'),
+        (DEFAULT, u'По умолчанию'),
+    )
+
+    priority = models.IntegerField(u'Приоритет', default=99,
+                                   choices=PRIORITY_CHOICES,
+                                   )
 
 
 class Product(AbstractProduct):
