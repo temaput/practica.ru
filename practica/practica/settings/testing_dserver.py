@@ -1,13 +1,12 @@
 from .base import *
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 from .local_settings import DATABASES
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-ALLOWED_HOSTS = ['*']
 
-USE_LESS = False
+MEDIA_ROOT = root('media')
 
 #
 # Debug toolbar
@@ -15,23 +14,19 @@ USE_LESS = False
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 INSTALLED_APPS += ('debug_toolbar',)
 MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
-# list of CLIENT ips allowing to see debug panel anly to someone
 INTERNAL_IPS = ['91.78.47.72', '104.131.24.92', '127.0.0.1']
-INTERNAL_IPS = ['*', '127.0.0.1', '104.131.24.92']
 DEBUG_TOOLBAR_CONFIG = {
 }
-SHOW_TOOLBAR_CALLBACK = lambda: True
 
+def show_toolbar(request):
+    return True
+SHOW_TOOLBAR_CALLBACK = show_toolbar
 # Logging
 # =======
 
 ERROR_TEST = True  #this should be false after succesfull testing
 ROBOKASSA_TEST_MODE = True
-
-from os import path
-
-STATIC_ROOT = '/var/nginx/STATIC_ROOT'
-MEDIA_ROOT = '/var/nginx/MEDIA_ROOT'
+COMPRESS_ROOT = root('staticfiles')
 
 LOG_ROOT = root('logs')
 # Ensure log root exists
@@ -100,8 +95,8 @@ LOGGING = {
         },
     },
     'root': {  # all other loggers
-        'handlers': ['error_file'],
-        'level': 'ERROR',
+        'handlers': ['console'],
+        'level': 'DEBUG',
         },
     'loggers': {  # the are the loggers that correspond to getLogger(name)
         'django': {  # correspond to getLogger('django')
@@ -115,7 +110,7 @@ LOGGING = {
             'propagate': False,
         },
         'oscar.checkout': {
-            'handlers': ['checkout_file'],
+            'handlers': ['console', 'checkout_file'],
             'propagate': True,
             'level': 'INFO',
         },
@@ -135,19 +130,19 @@ LOGGING = {
             'level': 'DEBUG',
         },
         'robokassa': {
-            'handlers':['null'],
+            'handlers':['console'],
             'propagate': False,
-            'level': 'INFO'
+            'level': 'DEBUG'
             },
         'tarifcalc': {
-            'handlers': ['null'],
+            'handlers': ['console'],
             'propagate': False,
             'level': 'INFO'
             },
         'catalogue': {
-            'handlers': ['null'],
+            'handlers': ['console'],
             'propagate': False,
-            'level': 'ERROR'
+            'level': 'DEBUG'
             },
         # suppress output of this debug toolbar panel
         'template_timings_panel': {  # this has something to do with django debug panel

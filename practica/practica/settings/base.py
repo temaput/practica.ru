@@ -151,6 +151,8 @@ USE_LESS = True
 COMPRESS_PRECOMPILERS = (
     ('text/less', 'lessc {infile} {outfile}'),
 )
+COMPRESS_CSS_FILTERS = ('compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.CSSMinFilter')
 
 HAYSTACK_CONNECTIONS = {
     'default': {
