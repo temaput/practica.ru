@@ -64,6 +64,9 @@
                 {% if product.contents %}
                 <li ><a href="" data-toggle="contents" >оглавление</a></li>
                 {% endif %}
+                {% if product.fragments.all %}
+                    <li><a href="" data-toggle="fragments" >примеры</a></li>
+                {% endif %}
             </ul>
             <ul class="footer__body toggle-body">
                 {% if product.description %}
@@ -71,6 +74,15 @@
                 {% endif %}
                 {% if product.contents %}
                 <li data-toggle="contents"><p>{{ product.contents|safe }}</p></li>
+                {% endif %}
+                {% if product.fragments.all %}
+                    <li data-toggle="fragments">       
+                    {% for fragment in product.fragments.all %}
+                        <p class="fragment">
+                        <a href="{{ fragment.original.url }}"><span class="text">{{fragment.caption}}</span></a>
+                        </p>
+                    {% endfor %}
+                    </li>
                 {% endif %}
             </ul>
         </div>
