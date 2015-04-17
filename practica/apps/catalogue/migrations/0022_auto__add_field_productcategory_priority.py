@@ -10,7 +10,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding field 'ProductCategory.priority'
         db.add_column(u'catalogue_productcategory', 'priority',
-                      self.gf('django.db.models.fields.IntegerField')(default=99),
+                      self.gf('django.db.models.fields.IntegerField')(default=99, blank=True),
                       keep_default=False)
 
 
@@ -116,7 +116,7 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "['product', 'category']", 'object_name': 'ProductCategory'},
             'category': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['catalogue.Category']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'priority': ('django.db.models.fields.IntegerField', [], {'default': '99'}),
+            'priority': ('django.db.models.fields.IntegerField', [], {'default': '99', 'blank': 'True'}),
             'product': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['catalogue.Product']"})
         },
         u'catalogue.productclass': {
