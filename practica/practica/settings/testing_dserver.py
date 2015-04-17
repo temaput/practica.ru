@@ -13,8 +13,9 @@ MEDIA_ROOT = root('media')
 #
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 INSTALLED_APPS += ('debug_toolbar',)
-MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
-INTERNAL_IPS = ['91.78.47.72', '104.131.24.92', '127.0.0.1']
+MIDDLEWARE_CLASSES = ('debug_toolbar.middleware.DebugToolbarMiddleware',) + MIDDLEWARE_CLASSES
+INTERNAL_IPS = ['95.165.73.112', '104.131.24.92', '127.0.0.1']
+# DEBUG_TOOLBAR_PANELS = ['debug_toolbar.panels.profiling.ProfilingPanel']
 DEBUG_TOOLBAR_CONFIG = {
 }
 

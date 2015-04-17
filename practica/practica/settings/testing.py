@@ -15,6 +15,8 @@ USE_LESS = False
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 INSTALLED_APPS += ('debug_toolbar',)
 MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+MIDDLEWARE_CLASSES += ('middleware.ProfileMiddleware',)  # my profiling
+PSTATS_SORT_TUPLE = ('cumtime', 'calls')
 # list of CLIENT ips allowing to see debug panel anly to someone
 INTERNAL_IPS = ['91.78.47.72', '104.131.24.92', '127.0.0.1']
 INTERNAL_IPS = ['*', '127.0.0.1', '104.131.24.92']
