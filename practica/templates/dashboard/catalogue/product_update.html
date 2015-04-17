@@ -51,6 +51,7 @@
                             <li><a href="#product_attributes" data-toggle="tab">{% trans 'Product attributes' %}</a></li>
                             <li><a href="#product_category" data-toggle="tab">{% trans 'Product category' %}</a></li>
                             <li><a href="#product_images" data-toggle="tab">{% trans 'Product images' %}</a></li>
+                            <li><a href="#product_fragments" data-toggle="tab">Фрагменты издания</a></li>
                             <li><a href="#product_stock" data-toggle="tab">{% trans 'Product stock' %}</a></li>
                         </ul>
                     </div>
@@ -275,6 +276,25 @@
                             {% endblock product_images_content %}
                         </div>
                     {% endblock product_images %}
+
+                    {% block product_fragments %}
+                        <div class="tab-pane" id="product_fragments">
+                            {% block product_fragments_content %}
+                                <table class="table table-striped table-bordered form-inline">
+                                    <caption>Добавить или удалить фрагменты издания (pdf)</caption>
+                                    {{ fragment_formset.management_form }}
+                                    {{ fragment_formset.non_form_errors }}
+                                    {% for fragment_form in fragment_formset %}
+                                        <tr>
+                                            <td>
+                                                {% include "partials/form_fields_inline.html" with form=fragment_form %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            {% endblock product_fragments_content %}
+                        </div>
+                    {% endblock product_fragments %}
 
                     {% block stockrecords %}
                         <div class="tab-pane" id="product_stock">
