@@ -8,21 +8,37 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ALLOWED_HOSTS = ['*']
 
 USE_LESS = False
+COMPRESS_OFFLINE = True
+COMPRESS_ENABLED = False
 
 #
 # Debug toolbar
 #
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 INSTALLED_APPS += ('debug_toolbar',)
+# INSTALLED_APPS += ('silk',)
 MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
-MIDDLEWARE_CLASSES += ('middleware.ProfileMiddleware',)  # my profiling
+# MIDDLEWARE_CLASSES += ('silk.middleware.SilkyMiddleware',)
+# MIDDLEWARE_CLASSES = ('middleware.ProfileMiddleware',) + MIDDLEWARE_CLASSES  # my profiling
+# MIDDLEWARE_CLASSES += ('middleware.TimingMiddleware',)  # my timing
 PSTATS_SORT_TUPLE = ('cumtime', 'calls')
 # list of CLIENT ips allowing to see debug panel anly to someone
-INTERNAL_IPS = ['91.78.47.72', '104.131.24.92', '127.0.0.1']
-INTERNAL_IPS = ['*', '127.0.0.1', '104.131.24.92']
+INTERNAL_IPS = ['109.188.127.4', '127.0.0.1']
 DEBUG_TOOLBAR_CONFIG = {
 }
-SHOW_TOOLBAR_CALLBACK = lambda: True
+# SHOW_TOOLBAR_CALLBACK = lambda: True
+
+
+
+# Caching
+# =====
+MIDDLEWARE_CLASSES = ('django.middleware.cache.UpdateCacheMiddleware',) + MIDDLEWARE_CLASSES
+MIDDLEWARE_CLASSES += ('django.middleware.cache.FetchFromCacheMiddleware',)
+CACHE_MIDDLEWARE_SECONDS = 600  # default
+
+# DB Connection pooling
+# =========
+CONN_MAX_AGE = 600
 
 # Logging
 # =======
