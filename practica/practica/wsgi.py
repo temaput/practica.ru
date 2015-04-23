@@ -30,5 +30,5 @@ application = get_wsgi_application()
 # Apply WSGI middleware here.
 # from helloworld.wsgi import HelloWorldApplication
 # application = HelloWorldApplication(application)
-from timingwsgi import TimingWSGIMiddleware
-application = TimingWSGIMiddleware(application)
+from timingwsgi import TimingWSGIMiddleware, ProfilingWSGIMiddleware
+application = ProfilingWSGIMiddleware(application)

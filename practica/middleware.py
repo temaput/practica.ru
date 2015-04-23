@@ -119,5 +119,4 @@ class ProfileMiddleware(object):
         return response
 
     def is_on(self, request):
-        return (settings.DEBUG or request.user.is_superuser)\
-            and 'prof' in request.GET
+        return 'prof' in request.GET
