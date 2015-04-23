@@ -16,17 +16,28 @@ COMPRESS_ENABLED = False
 #
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 INSTALLED_APPS += ('debug_toolbar',)
-INSTALLED_APPS += ('silk',)
+# INSTALLED_APPS += ('silk',)
 MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
-MIDDLEWARE_CLASSES += ('silk.middleware.SilkyMiddleware',)
-MIDDLEWARE_CLASSES += ('middleware.ProfileMiddleware',)  # my profiling
-MIDDLEWARE_CLASSES += ('middleware.TimingMiddleware',)  # my timing
+# MIDDLEWARE_CLASSES += ('silk.middleware.SilkyMiddleware',)
+# MIDDLEWARE_CLASSES = ('middleware.ProfileMiddleware',) + MIDDLEWARE_CLASSES  # my profiling
+# MIDDLEWARE_CLASSES += ('middleware.TimingMiddleware',)  # my timing
 PSTATS_SORT_TUPLE = ('cumtime', 'calls')
 # list of CLIENT ips allowing to see debug panel anly to someone
 INTERNAL_IPS = ['109.188.127.4', '127.0.0.1']
 DEBUG_TOOLBAR_CONFIG = {
 }
-SHOW_TOOLBAR_CALLBACK = lambda: True
+# SHOW_TOOLBAR_CALLBACK = lambda: True
+
+
+
+# Caching
+# =====
+MIDDLEWARE_CLASSES = ('django.middleware.cache.UpdateCacheMiddleware',) + MIDDLEWARE_CLASSES
+MIDDLEWARE_CLASSES += ('django.middleware.cache.FetchFromCacheMiddleware',)
+
+# DB Connection pooling
+# =========
+CONN_MAX_AGE = 600
 
 # Logging
 # =======
