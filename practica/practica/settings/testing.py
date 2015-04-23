@@ -34,6 +34,7 @@ DEBUG_TOOLBAR_CONFIG = {
 # =====
 MIDDLEWARE_CLASSES = ('django.middleware.cache.UpdateCacheMiddleware',) + MIDDLEWARE_CLASSES
 MIDDLEWARE_CLASSES += ('django.middleware.cache.FetchFromCacheMiddleware',)
+CACHE_MIDDLEWARE_SECONDS = 600  # default
 
 # DB Connection pooling
 # =========

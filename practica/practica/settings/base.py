@@ -107,6 +107,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'django.middleware.http.ConditionalGetMiddleware',
     'oscar.apps.basket.middleware.BasketMiddleware',
     'middleware.AjaxMessaging',
     # Uncomment the next line for simple clickjacking protection:
