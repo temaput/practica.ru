@@ -1,6 +1,6 @@
 from .base import *
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 from .local_settings import DATABASES
@@ -8,13 +8,17 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ALLOWED_HOSTS = ['*']
 
 USE_LESS = False
+COMPRESS_OFFLINE = True
+COMPRESS_ENABLED = False
 
 #
 # Debug toolbar
 #
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 INSTALLED_APPS += ('debug_toolbar',)
+INSTALLED_APPS += ('silk',)
 MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+MIDDLEWARE_CLASSES += ('silk.middleware.SilkyMiddleware',)
 MIDDLEWARE_CLASSES += ('middleware.ProfileMiddleware',)  # my profiling
 MIDDLEWARE_CLASSES += ('middleware.TimingMiddleware',)  # my timing
 PSTATS_SORT_TUPLE = ('cumtime', 'calls')

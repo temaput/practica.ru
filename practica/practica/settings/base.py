@@ -172,14 +172,14 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'django.contrib.sitemaps',
     'south',
-    #'compressor',
+    'compressor',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
-    #'django.contrib.admindocs',
-    #'haystack',
+    'django.contrib.admindocs',
+    'haystack',
     # 'robokassa',
-    #'practica_templatetags',
+    'practica_templatetags',
 ] + get_core_apps(['apps.promotions', 'apps.basket', 'apps.checkout',
                    'apps.catalogue', 'apps.shipping', 'apps.payment',
                    'apps.order', 'apps.address'])
