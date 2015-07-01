@@ -32,9 +32,30 @@ DEBUG_TOOLBAR_CONFIG = {
 
 # Caching
 # =====
+# RAM caching used by default. Lets use redis
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://localhost:6379/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 MIDDLEWARE_CLASSES = ('django.middleware.cache.UpdateCacheMiddleware',) + MIDDLEWARE_CLASSES
 MIDDLEWARE_CLASSES += ('django.middleware.cache.FetchFromCacheMiddleware',)
 CACHE_MIDDLEWARE_SECONDS = 600  # default
+
+# use redis for sessions
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
+
+# use redis for thumbnail lookup (sorl)
+THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
+THUMBNAIL_REDIS_DB = 1  # redis provides up to 16 dbs by default
+
 
 # DB Connection pooling
 # =========
