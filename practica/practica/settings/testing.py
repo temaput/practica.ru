@@ -7,9 +7,9 @@ from .local_settings import DATABASES
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ALLOWED_HOSTS = ['*']
 
-USE_LESS = False
-COMPRESS_OFFLINE = True
-COMPRESS_ENABLED = False
+USE_LESS = True
+COMPRESS_OFFLINE = False
+COMPRESS_ENABLED = True
 
 #
 # Debug toolbar
