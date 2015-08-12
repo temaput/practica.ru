@@ -42,8 +42,8 @@ urlpatterns = patterns('',
 )
 
 # Install Silk profiler
-urlpatterns += patterns('',
-                        url(r'^silk', include('silk.urls', namespace='silk')))
+# urlpatterns += patterns('',
+#                         url(r'^silk', include('silk.urls', namespace='silk')))
 # Allow rosetta to be used to add translations
 if 'rosetta' in settings.INSTALLED_APPS:
     urlpatterns += patterns('',
