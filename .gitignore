@@ -6,6 +6,7 @@
 _locale/
 /practica/staticfiles/
 /practica/media/
+/practica/static/practica/fonts/
 /practica/whoosh_index/
 /practica/manage.py
 *.sqlite3
