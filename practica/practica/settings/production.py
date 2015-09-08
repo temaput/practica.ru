@@ -175,12 +175,17 @@ LOGGING = {
             'level': 'DEBUG',
         },
         'robokassa': {
-            'handlers':['null'],
+            'handlers': ['null'],
             'propagate': False,
             'level': 'INFO'
             },
         'tarifcalc': {
             'handlers': ['null'],
+            'propagate': False,
+            'level': 'INFO'
+            },
+        'checkout.receivers': {
+            'handlers': ['checkout_file'],
             'propagate': False,
             'level': 'INFO'
             },
