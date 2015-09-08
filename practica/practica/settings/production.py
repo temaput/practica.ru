@@ -59,21 +59,20 @@ THUMBNAIL_REDIS_DB = 1  # redis provides up to 16 dbs by default
 # EMAILS
 #========
 
-EMAIL_BACKEND = 'granatshop.smtpssl_backend.EmailSSLBackend'
-EMAIL_HOST = 'smtp.jino.ru'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail.nic.ru'
 EMAIL_HOST_USER = os.environ['PRACTICA_EMAIL']
 EMAIL_HOST_PASSWORD = os.environ['PRACTICA_EMAIL_PASSWORD']
 EMAIL_USE_TLS = True
 EMAIL_PORT = '465'
 SERVER_EMAIL = EMAIL_HOST_USER
-ERROR_TEST = False  #this should be false after succesfull testing
+ERROR_TEST = True  #this should be false after succesfull testing
 
 
 ROBOKASSA_TEST_MODE = True
 # Logging
 # =======
 
-ERROR_TEST = True  #this should be false after succesfull testing
 LOG_ROOT = root('logs')
 # Ensure log root exists
 if not os.path.exists(LOG_ROOT):
