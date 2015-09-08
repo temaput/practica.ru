@@ -13,7 +13,7 @@ OSCAR_CURRENCY_FORMAT = u'#,##0.00 ¤'
 OSCAR_ALLOW_ANON_CHECKOUT = True
 OSCAR_ALLOW_ANON_REVIEWS = False
 OSCAR_MODERATE_REVIEWS = True
-OSCAR_FROM_EMAIL = 'order@granatbooks.ru'
-OSCAR_STATIC_BASE_URL = 'granatbooks.ru'
+OSCAR_FROM_EMAIL = 'practica@practica.ru'
+OSCAR_STATIC_BASE_URL = 'practica.ru'
 from oscar.defaults import OSCAR_REQUIRED_ADDRESS_FIELDS
 OSCAR_REQUIRED_ADDRESS_FIELDS += ('phone_number',)
