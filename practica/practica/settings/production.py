@@ -22,11 +22,43 @@ ALLOWED_HOSTS = ['*']
 GOOGLE_ANALYTICS_ID = get_env('PRACTICA_GOOGLE_ANALYTICS_ID')
 YANDEX_METRIKA_ID = get_env('PRACTICA_YANDEX_METRIKA_ID')
 
+#
+# Compression
+#
+USE_LESS = True
+COMPRESS_OFFLINE = False
+COMPRESS_ENABLED = True
+
+
+# Caching
+# =====
+# RAM caching used by default. Lets use redis
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://localhost:6379/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+MIDDLEWARE_CLASSES = ('django.middleware.cache.UpdateCacheMiddleware',) + MIDDLEWARE_CLASSES
+MIDDLEWARE_CLASSES += ('django.middleware.cache.FetchFromCacheMiddleware',)
+CACHE_MIDDLEWARE_SECONDS = 600  # default
+
+# use redis for sessions
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
+
+# use redis for thumbnail lookup (sorl)
+THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
+THUMBNAIL_REDIS_DB = 1  # redis provides up to 16 dbs by default
 
 # EMAILS
 #========
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'granatshop.smtpssl_backend.EmailSSLBackend'
 EMAIL_HOST = 'smtp.jino.ru'
 EMAIL_HOST_USER = os.environ['PRACTICA_EMAIL']
@@ -37,9 +69,11 @@ SERVER_EMAIL = EMAIL_HOST_USER
 ERROR_TEST = False  #this should be false after succesfull testing
 
 
+ROBOKASSA_TEST_MODE = True
 # Logging
 # =======
 
+ERROR_TEST = True  #this should be false after succesfull testing
 LOG_ROOT = root('logs')
 # Ensure log root exists
 if not os.path.exists(LOG_ROOT):
@@ -61,22 +95,22 @@ LOGGING = {
             'format': '[%(asctime)s] %(message)s'
         },
     },
-    'filters': {
-        'require_debug_false': {
+    'filters': {  # describe additional conditions of logging
+        'require_debug_false': {  # works only in production (for emailing to admins)
             '()': 'django.utils.log.RequireDebugFalse'
         }
     },
-    'handlers': {
-        'null': {
+    'handlers': {  # describe the destination of log (file, console, email...)
+        'null': {  # do nothing
             'level': 'DEBUG',
             'class': 'django.utils.log.NullHandler',
         },
-        'console': {
+        'console': {  # print to console
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
-        'checkout_file': {
+        'checkout_file': {  # all oscar logs printed to LOG_ROOT/filename
             'level': 'INFO',
             'class': 'oscar.core.logging.handlers.EnvFileHandler',
             'filename': 'checkout.log',
@@ -100,25 +134,29 @@ LOGGING = {
             'filename': 'sorl.log',
             'formatter': 'verbose'
         },
-        'mail_admins': {
+        'mail_admins': {  # this is for mailing admins in case of any ERROR
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler',
             'filters': ['require_debug_false'],
         },
     },
-    'loggers': {
-        'django': {
+    'root': {  # all other loggers
+        'handlers': ['error_file'],
+        'level': 'ERROR',
+        },
+    'loggers': {  # the are the loggers that correspond to getLogger(name)
+        'django': {  # correspond to getLogger('django')
             'handlers': ['null'],
             'propagate': True,
             'level': 'INFO',
         },
-        'django.request': {
+        'django.request': {  # getLogger('django.request')
             'handlers': ['mail_admins', 'error_file'],
             'level': 'ERROR',
             'propagate': False,
         },
         'oscar.checkout': {
-            'handlers': ['console', 'checkout_file'],
+            'handlers': ['checkout_file'],
             'propagate': True,
             'level': 'INFO',
         },
@@ -138,12 +176,22 @@ LOGGING = {
             'level': 'DEBUG',
         },
         'robokassa': {
-            'handlers': ['mail_admins', 'error_file'],
-            'level': 'ERROR',
-            'propagate': False
+            'handlers':['null'],
+            'propagate': False,
+            'level': 'INFO'
+            },
+        'tarifcalc': {
+            'handlers': ['null'],
+            'propagate': False,
+            'level': 'INFO'
+            },
+        'catalogue': {
+            'handlers': ['null'],
+            'propagate': False,
+            'level': 'ERROR'
             },
         # suppress output of this debug toolbar panel
-        'template_timings_panel': {
+        'template_timings_panel': {  # this has something to do with django debug panel
             'handlers': ['null'],
             'level': 'DEBUG',
             'propagate': False,
