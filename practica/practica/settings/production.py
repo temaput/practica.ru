@@ -43,9 +43,9 @@ CACHES = {
         }
     }
 }
-MIDDLEWARE_CLASSES = ('django.middleware.cache.UpdateCacheMiddleware',) + MIDDLEWARE_CLASSES
-MIDDLEWARE_CLASSES += ('django.middleware.cache.FetchFromCacheMiddleware',)
-CACHE_MIDDLEWARE_SECONDS = 600  # default
+# MIDDLEWARE_CLASSES = ('django.middleware.cache.UpdateCacheMiddleware',) + MIDDLEWARE_CLASSES
+# MIDDLEWARE_CLASSES += ('django.middleware.cache.FetchFromCacheMiddleware',)
+# CACHE_MIDDLEWARE_SECONDS = 600  # default
 
 # use redis for sessions
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
