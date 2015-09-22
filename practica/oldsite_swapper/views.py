@@ -20,7 +20,7 @@ class OldSiteSwapper(RedirectView):
         if oldsite_product.exists():
             return oldsite_product.first().get_absolute_url()
         else:
-            raise Http404
+	    return "/"
 
 
 
