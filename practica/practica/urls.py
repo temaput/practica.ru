@@ -38,6 +38,12 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
         url(r'^admin/', include(admin.site.urls)),
+    # favicon for every page
+	url(r'^favicon\.ico$', RedirectView.as_view(url='/static/oscar/favicon.ico')),
+    # old index page
+	url(r'^index\.htm$', RedirectView.as_view(url='/')),
+	url(r'^Books/index\.html?$', RedirectView.as_view(url='/')),
+	url(r'^Books/cart\.htm$', RedirectView.as_view(url='/OldCatalog/cart.htm')),
 
 )
 
