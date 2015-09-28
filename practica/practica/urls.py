@@ -42,8 +42,6 @@ urlpatterns = patterns('',
 	url(r'^favicon\.ico$', RedirectView.as_view(url='/static/oscar/favicon.ico')),
     # old index page
 	url(r'^index\.htm$', RedirectView.as_view(url='/')),
-	url(r'^Books/index\.html?$', RedirectView.as_view(url='/')),
-	url(r'^Books/cart\.htm$', RedirectView.as_view(url='/OldCatalog/cart.htm')),
 
 )
 

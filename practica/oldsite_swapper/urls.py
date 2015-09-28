@@ -11,7 +11,9 @@ from .views import OldSiteSwapper
 urlpatterns = patterns(
     '',
     # /Books/[xxx.html]
+    url(r"^cart.htm$", RedirectView.as_view(url='/OldCatalog/cart.htm')),
     url(r"^index.html$", RedirectView.as_view(url='/')),
     url(r"^(?P<old_href>.*\.html)$", OldSiteSwapper.as_view(),
         name="oldsite_swapper_view"),
+    url(r"", RedirectView.as_view(url='/')),
 )
