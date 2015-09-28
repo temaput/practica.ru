@@ -10,7 +10,7 @@ STATIC_ROOT = '/var/nginx/STATIC_ROOT'
 MEDIA_ROOT = '/var/nginx/MEDIA_ROOT'
 
 # Dunno if it works, need checking
-SEND_BROKEN_LINK_EMAILS = True
+SEND_BROKEN_LINK_EMAILS = False
 
 
 ALLOWED_HOSTS = ['*']
