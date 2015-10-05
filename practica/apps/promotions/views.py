@@ -1,6 +1,6 @@
 from django.views.generic.list import ListView
 from django.conf import settings
-from django.db.models import get_model
+from django.db.models import get_model, Min
 
 Category = get_model('catalogue', 'Category')
 Product = get_model('catalogue', 'Product')
@@ -19,7 +19,9 @@ class PracticaHomeView(ListView):
         qs = Product.browsable.base_queryset()
         self.base_qs = qs.all()
         cat = Category.objects.get(slug=settings.HOME_PAGE_CATEGORY_SLUG)
-        self.qs = qs.filter(categories=cat).order_by("title")
+        self.qs = qs.filter(categories=cat).annotate(
+            Min("productcategory__priority")).order_by(
+                "productcategory__priority__min", "title").distinct()
         return self.qs
 
     def get_context_data(self, **kwargs):
