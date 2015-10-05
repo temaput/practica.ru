@@ -4,3 +4,4 @@
 {{ object.contents|default:"" }}
 {{ object.description|default:"" }}
 {{ object.attribute_summary|default:"" }}
+{{ object.categories.all }}
