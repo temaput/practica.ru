@@ -1,0 +1,3 @@
+[submodule "practica/tarifcalc"]
+	path = practica/tarifcalc
+	url = git@github.com:temaput/tarifcalc.git

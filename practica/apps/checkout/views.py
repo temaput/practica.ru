@@ -194,7 +194,8 @@ class PaymentMethodView(CheckoutSessionMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         method_code = request.POST.get('method_code', None)
-        #Check the validity of method
+
+        # Check the validity of method
         log.debug("Payment method code = %s", method_code)
         if method_code in [m.code for m in
                            self.get_available_payment_methods()]:
@@ -203,14 +204,18 @@ class PaymentMethodView(CheckoutSessionMixin, TemplateView):
         return self.get_success_response()
 
     def get_available_payment_methods(self):
+        log.debug("In get_available_payment_methods")
         source_types = SourceType.objects.all()
         shipping_method = self.get_shipping_method(self.request.basket)
-        return getattr(shipping_method,
-                       'payment_methods_allowed', source_types)
+        log.debug("Shipping method is %s", shipping_method)
+        allowed_methods = getattr(shipping_method,
+                                  'payment_methods_allowed', source_types)
+        return allowed_methods
 
     def get_context_data(self, **kwargs):
         ctx = super(PaymentMethodView, self).get_context_data(**kwargs)
         ctx['payment_methods'] = self.get_available_payment_methods()
+        log.debug(ctx['payment_methods'])
         return ctx
 
     def get_success_response(self):

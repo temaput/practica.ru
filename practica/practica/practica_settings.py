@@ -7,3 +7,4 @@ from __future__ import print_function
 
 HOME_PAGE_CATEGORY_SLUG = 'na-glavnoi'
 HOME_BANNERS_CATEGORY_NAME = u'Баннеры'
+CASH_SOURCE_TYPE_NAME = u'Наличные'

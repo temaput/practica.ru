@@ -11,6 +11,7 @@ log = logging.getLogger(__name__)
 from decimal import Decimal as D
 
 from django.db.models import get_model
+from django.conf import settings
 from oscar.apps.shipping.base import Base
 from apps.shipping.utils import estimateWeight
 
@@ -77,5 +78,7 @@ class RusPost(Base):
 
     @property
     def payment_methods_allowed(self):
-        return SourceType.objects.exclude(
-            name__iexact="наличными")
+        methods_allowed = SourceType.objects.exclude(
+            name__iexact=settings.CASH_SOURCE_TYPE_NAME)
+        log.debug("returning %s payment_methods", len(methods_allowed))
+        return methods_allowed
