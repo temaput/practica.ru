@@ -41,7 +41,11 @@ def send_advice_message(sender, **kwargs):
         for manager in User.objects.filter(is_staff=True):  # Here we should pick users from managers group
             if manager.email:
                 dispatcher = Dispatcher()
-                dispatcher.dispatch_direct_messages(manager.email, messages)
+                try:
+                    dispatcher.dispatch_direct_messages(
+                        manager.email, messages)
+                except:
+                    log.warning("Advice message send failed")
 
 
 def send_payment_received(sender, **kwargs):
@@ -86,7 +90,7 @@ def send_payment_received(sender, **kwargs):
             'site': site,
             'amount_debited': amount_debited,
             'source_type': source_type}
-    
+
     try:
         event_type = CommunicationEventType.objects.get(code=code)
     except CommunicationEventType.DoesNotExist:
@@ -101,7 +105,10 @@ def send_payment_received(sender, **kwargs):
 
     if messages and messages['body']:
         dispatcher = Dispatcher()
-        dispatcher.dispatch_direct_messages(email, messages)
+        try:
+            dispatcher.dispatch_direct_messages(email, messages)
+        except:
+            log.warning("Payment received send failed")
 
 def send_order_placed(sender, **kwargs):
     if 'confirmation_not_sent' in kwargs:
@@ -112,4 +119,3 @@ def send_order_placed(sender, **kwargs):
             except:
                 log.warning("Order #%s - no confirmation was sent",
                             kwargs['order'].number)
-
