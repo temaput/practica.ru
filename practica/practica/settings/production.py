@@ -60,6 +60,7 @@ THUMBNAIL_REDIS_DB = 1  # redis provides up to 16 dbs by default
 #========
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'mail.nic.ru'
 EMAIL_HOST_USER = get_env('PRACTICA_EMAIL')
 EMAIL_HOST_PASSWORD = get_env('PRACTICA_EMAIL_PASSWORD')
