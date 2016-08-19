@@ -12,6 +12,7 @@ _locale/
 *.sqlite3
 local_settings.py
 *.bak
+*.DBF
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -201,3 +201,4 @@ from practica.oscar_settings import *
 from practica.requisites import REQUISITES
 # from practica.robokassa_settings import *
 from practica.practica_settings import *
+from practica.tarifcalc_settings import *

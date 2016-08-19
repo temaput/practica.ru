@@ -61,6 +61,10 @@ class RusPost(Base):
             DBPATH=settings.PROJECTPATH,
             TMPPATH=tmppath
         )}
+
+	if hasattr(settings, 'TARIFCALC_TARIF'):
+		tarifConfig.update(settings.TARIFCALC_TARIF)
+
         if hasattr(self, 'postcode'):
             tarifRequest['To'] = self.postcode
         log.debug("tarifRequest is %s", tarifRequest)
