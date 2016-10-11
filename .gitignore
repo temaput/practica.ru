@@ -13,6 +13,8 @@ _locale/
 local_settings.py
 *.bak
 *.DBF
+practica/tmp.zip
+practica/zonesdb
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
