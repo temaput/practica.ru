@@ -1,3 +1,31 @@
+@font-face {
+  font-family: 'CirceWeb-Regular';
+  src: url('/static/practica/fonts/CRC55__W.eot');
+  src: url('/static/practica/fonts/CRC55__W.eot?#iefix') format('embedded-opentype'), url('/static/practica/fonts/CRC55__W.woff') format('woff'), url('/static/practica/fonts/CRC55__W.ttf') format('truetype'), url('/static/practica/fonts/CRC55__W.svg#CirceWeb-Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'CirceWeb-Light';
+  src: url('/static/practica/fonts/CRC35__W.eot');
+  src: url('/static/practica/fonts/CRC35__W.eot?#iefix') format('embedded-opentype'), url('/static/practica/fonts/CRC35__W.woff') format('woff'), url('/static/practica/fonts/CRC35__W.ttf') format('truetype'), url('/static/practica/fonts/CRC35__W.svg#CirceWeb-Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'CirceWeb-Bold';
+  src: url('/static/practica/fonts/CRC65__W.eot');
+  src: url('/static/practica/fonts/CRC65__W.eot?#iefix') format('embedded-opentype'), url('/static/practica/fonts/CRC65__W.woff') format('woff'), url('/static/practica/fonts/CRC65__W.ttf') format('truetype'), url('/static/practica/fonts/CRC65__W.svg#CirceWeb-Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'CirceWeb-ExtraBold';
+  src: url('/static/practica/fonts/CRC75__W.eot');
+  src: url('/static/practica/fonts/CRC75__W.eot?#iefix') format('embedded-opentype'), url('/static/practica/fonts/CRC75__W.woff') format('woff'), url('/static/practica/fonts/CRC75__W.ttf') format('truetype'), url('/static/practica/fonts/CRC75__W.svg#CirceWeb-Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
 html {
   background: white;
   text-align: center;
