@@ -32,10 +32,13 @@ services:
         volumes:
             - data:/data
         environment:
-            PSTGRES_USER:
-            POSTGRES_PASSWORD:
-            POSTGRES_DB:
             DJANGO_SECRET_KEY:
+            PRACTICA_ROBOKASSA_PASSWORD1:
+            PRACTICA_ROBOKASSA_PASSWORD2:
+            PRACTICA_GOOGLE_ANALYTICS_ID:
+            PRACTICA_YANDEX_METRIKA_ID:
+            PRACTICA_EMAIL:
+            PRACTICA_EMAIL_PASSWORD:
 volumes:
     data:
         external:

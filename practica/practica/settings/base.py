@@ -6,7 +6,7 @@ from os.path import join, realpath, pardir, dirname
 
 from django.core.exceptions import ImproperlyConfigured
 
-def get_env(name):
+def get_env(name, fallback='not set'):
     try:
         return os.environ[name]
     except KeyError:
@@ -14,7 +14,7 @@ def get_env(name):
             import local_settings
             return getattr(local_settings, name)
         except (ImportError, AttributeError):
-            pass
+            return fallback
 
 PROJECTPATH =  realpath(join(dirname(__file__), pardir, pardir))
 root = lambda x: join(PROJECTPATH, x)
@@ -87,9 +87,9 @@ STATICFILES_FINDERS = (
 
 # Make this unique, and don't share it with anybody.
 
-SECRET_KEY = get_env('PRACTICA_SECRET_KEY')
-ROBOKASSA_PASSWORD1 = get_env('GRANAT_ROBOKASSA_PASSWORD1')
-ROBOKASSA_PASSWORD2 = get_env('GRANAT_ROBOKASSA_PASSWORD2')
+SECRET_KEY = get_env('DJANGO_SECRET_KEY', 'not set')
+ROBOKASSA_PASSWORD1 = get_env('PRACTICA_ROBOKASSA_PASSWORD1')
+ROBOKASSA_PASSWORD2 = get_env('PRACTICA_ROBOKASSA_PASSWORD2')
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
