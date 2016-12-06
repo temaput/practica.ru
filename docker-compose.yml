@@ -1,0 +1,42 @@
+version: '2'
+services:
+    cache:
+        image: redis
+    static:
+        build: ./nginx
+        volumes:
+            - data:/var/nginx
+        links:
+            - web:gunicorn
+        ports: 
+            - "80:80"
+    db:
+        build: 
+            context: .
+            dockerfile: postgres_ru_Dockerfile
+        volumes:
+            - data:/var/lib/postgresql/data
+        environment:
+            POSTGRES_USER:
+            POSTGRES_PASSWORD:
+            POSTGRES_DB:
+            PGDATA: "/var/lib/postgresql/data/pgdata"
+    web:
+        build: .
+        command: gunicorn --workers=4 --bind=0.0.0.0:8000 practica.wsgi 
+        depends_on:
+            - cache
+            - db
+        links:
+            - cache:redis
+        volumes:
+            - data:/data
+        environment:
+            PSTGRES_USER:
+            POSTGRES_PASSWORD:
+            POSTGRES_DB:
+            DJANGO_SECRET_KEY:
+volumes:
+    data:
+        external:
+            name: practica

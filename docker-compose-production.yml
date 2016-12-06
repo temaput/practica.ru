@@ -1,0 +1,11 @@
+version: '2'
+services:
+    db:
+        restart: always
+    static:
+        restart: always
+    web:
+        command: gunicorn --workers=4 --bind=0.0.0.0:8000 practica.wsgi 
+        restart: always
+    cache:
+        restart: always

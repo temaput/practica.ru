@@ -1,8 +1,10 @@
 # Mac
 
 .DS_Store
+
 # Custom
 
+transfer/
 _locale/
 /practica/staticfiles/
 /practica/media/
@@ -15,6 +17,7 @@ local_settings.py
 *.DBF
 practica/tmp.zip
 practica/zonesdb
+docker-compose.override.yml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

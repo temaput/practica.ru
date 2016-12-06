@@ -4,10 +4,22 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 
-from .local_settings import DATABASES
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'django_practica',                      # Or path to database file if using sqlite3.
+        'USER': 'tema',                      # Not used with sqlite3.
+        'PASSWORD': '1770Beethoven',                  # Not used with sqlite3.
+        'HOST': 'db',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': 5432,                      # Set to empty string for default. Not used with sqlite3.
+    }
+}
 
-STATIC_ROOT = '/var/nginx/STATIC_ROOT'
-MEDIA_ROOT = '/var/nginx/MEDIA_ROOT'
+# STATIC_ROOT is to collect static offline in deploy
+STATIC_ROOT = '/data/STATIC_ROOT'
+
+# MEDIA_ROOT is to collect media online
+MEDIA_ROOT = '/data/MEDIA_ROOT'
 
 # Dunno if it works, need checking
 SEND_BROKEN_LINK_EMAILS = False
@@ -25,7 +37,7 @@ YANDEX_METRIKA_ID = get_env('PRACTICA_YANDEX_METRIKA_ID')
 #
 # Compression
 #
-USE_LESS = True
+USE_LESS = False
 COMPRESS_OFFLINE = False
 COMPRESS_ENABLED = True
 
@@ -37,7 +49,7 @@ COMPRESS_ENABLED = True
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://localhost:6379/0",
+        "LOCATION": "redis://redis:6379/0",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -55,6 +67,7 @@ SESSION_CACHE_ALIAS = "default"
 # use redis for thumbnail lookup (sorl)
 THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
 THUMBNAIL_REDIS_DB = 1  # redis provides up to 16 dbs by default
+THUMBNAIL_REDIS_HOST = 'redis'
 
 # EMAILS
 #========
