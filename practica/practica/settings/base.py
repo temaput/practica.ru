@@ -158,7 +158,7 @@ COMPRESS_CSS_FILTERS = ('compressor.filters.css_default.CssAbsoluteFilter',
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-        'PATH':root('whoosh_index')
+        'PATH': '/data/whoosh_index'
     },
 }
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
