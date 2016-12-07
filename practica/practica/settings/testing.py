@@ -16,10 +16,10 @@ DATABASES = {
 }
 
 # STATIC_ROOT is to collect static offline in deploy
-STATIC_ROOT = '/data/static'
+STATIC_ROOT = '/data/STATIC_ROOT'
 
 # MEDIA_ROOT is to collect media online
-MEDIA_ROOT = '/data/media'
+MEDIA_ROOT = '/data/MEDIA_ROOT'
 
 # Dunno if it works, need checking
 SEND_BROKEN_LINK_EMAILS = False
@@ -46,14 +46,26 @@ COMPRESS_ENABLED = True
 # =====
 # RAM caching used by default. Lets use redis
 
-# MIDDLEWARE_CLASSES = ('django.middleware.cache.UpdateCacheMiddleware',) + MIDDLEWARE_CLASSES
-# MIDDLEWARE_CLASSES += ('django.middleware.cache.FetchFromCacheMiddleware',)
-# CACHE_MIDDLEWARE_SECONDS = 600  # default
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 
+TEMPLATE_CACHE_TIMEOUT = 30*24*60*60
 # use redis for sessions
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
 
 
 # use redis for thumbnail lookup (sorl)
+THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
+THUMBNAIL_REDIS_DB = 1  # redis provides up to 16 dbs by default
+THUMBNAIL_REDIS_HOST = 'redis'
 
 # EMAILS
 #========
@@ -202,3 +214,15 @@ LOGGING = {
         }
     }
 }
+
+
+#
+# Debug toolbar
+#
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
+INSTALLED_APPS += ('debug_toolbar',)
+MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda _: True
+}
+INTERNAL_IPS = ['172.18.0.1']

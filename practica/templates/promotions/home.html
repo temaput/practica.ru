@@ -5,11 +5,14 @@
 {% load category_tags %}
 {% load product_tags %}
 {% load i18n %}
+{% load cache %}
 
 {% block header %}{% endblock %}
 
 {% block content %}
 <!-- Carousel -->
+{% with MONTH=2592000 %}
+{% cache MONTH home_carousel %}
 <div class="carousel__container">
     {% if highlights %}
     <ul class="carousel large">
@@ -76,8 +79,10 @@
         <a class="right carousel-control" href="#" data-slide="next"><span class="button right-arrow-small"></span></a>
     </div>
 </div>
+{% endcache %}
 <!-- Goods -->
 
+{% cache MONTH home_goods %}
 {% if products %}
 <div class="goods-cutter">
     <ul class="goods">
@@ -87,6 +92,8 @@
     </ul>
 </div>
 {% endif %}
+{% endcache %}
+{% endwith %}
 {% endblock content %}
 {% block extrascripts %}
     {% include "partials/basket_extrascripts.html" %}

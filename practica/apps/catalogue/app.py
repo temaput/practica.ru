@@ -1,7 +1,11 @@
-from django.conf.urls import patterns, url, include
+from django.conf.urls import patterns, url
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.db.models import get_model
 
 from oscar.apps.catalogue.app import ReviewsApplication
 from oscar.apps.catalogue.app import BaseCatalogueApplication as CoreCatApp
+from practica.cache_utils import invalidate_template_cache
 from . import views
 
 
@@ -36,3 +40,17 @@ class CatalogueApplication(BaseCatalogueApplication, ReviewsApplication):
 
 
 application = CatalogueApplication()
+
+MODELS = (
+    ('catalogue', 'Product'),
+    ('catalogue', 'ProductCategory'),
+)
+MODELS_LIST = tuple(
+    get_model(app, modelname) for app, modelname in MODELS
+)
+
+
+@receiver(post_save)
+def invalidate_cache(sender, **kwargs):
+    if sender in MODELS_LIST:
+        invalidate_template_cache()

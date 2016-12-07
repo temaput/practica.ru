@@ -161,6 +161,7 @@ HAYSTACK_CONNECTIONS = {
         'PATH':root('whoosh_index')
     },
 }
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 from oscar import get_core_apps
 INSTALLED_APPS = [
