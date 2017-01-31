@@ -5,4 +5,5 @@ WORKDIR /code
 ADD requirements.txt /code/
 RUN pip install -r requirements.txt
 RUN pip install git+https://github.com/temaput/drawinvoice.git
+RUN pip install git+https://github.com/temaput/tarifcalc.git
 ADD ./practica /code/
