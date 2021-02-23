@@ -74,13 +74,13 @@ THUMBNAIL_REDIS_HOST = 'redis'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST = 'mail.nic.ru'
-EMAIL_HOST_USER = get_env('PRACTICA_EMAIL')
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = get_env('PRACTICA_EMAIL_PASSWORD')
-EMAIL_USE_TLS = False
-EMAIL_PORT = '587'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
 SERVER_EMAIL = EMAIL_HOST_USER
-ERROR_TEST = True  #this should be false after succesfull testing
+ERROR_TEST = False  #this should be false after succesfull testing
 
 
 ROBOKASSA_TEST_MODE = True
@@ -216,3 +216,12 @@ LOGGING = {
         }
     }
 }
+
+import re
+IGNORABLE_404_URLS = [
+    re.compile(r'\.(php|cgi)$'),
+    re.compile(r'^/phpmyadmin/'),
+    re.compile(r'^/apple-touch-icon.*\.png$'),
+    re.compile(r'^/favicon\.ico$'),
+    re.compile(r'^/robots\.txt$'),
+]

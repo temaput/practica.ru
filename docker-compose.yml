@@ -23,7 +23,7 @@ services:
             PGDATA: "/var/lib/postgresql/data/pgdata"
     web:
         build: .
-        command: gunicorn --workers=4 --bind=0.0.0.0:8000 practica.wsgi 
+        command: python manage.py runserver 0.0.0.0:8000
         depends_on:
             - cache
             - db
@@ -39,6 +39,7 @@ services:
             PRACTICA_YANDEX_METRIKA_ID:
             PRACTICA_EMAIL:
             PRACTICA_EMAIL_PASSWORD:
+            DJANGO_SETTINGS_MODULE: practica.settings.testing
 volumes:
     data:
         external:
