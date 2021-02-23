@@ -32,7 +32,7 @@ html {
 }
 body {
   position: relative;
-  font: 15px/1 Georgia, Times, serif;
+  /* font: 15px/1 Georgia, Times, serif; */
   text-align: left;
   color: #414042;
   margin: 0 auto;

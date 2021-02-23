@@ -21,7 +21,7 @@ gunicorn==19.3.0
 ipython==2.1.0
 pep8==1.6.2
 phonenumbers==6.0.0a
-psycopg2==2.5.4
+psycopg2==2.7
 purl==0.8
 python-dateutil==2.4.2
 pytils==0.3

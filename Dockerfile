@@ -7,3 +7,5 @@ RUN pip install -r requirements.txt
 RUN pip install git+https://github.com/temaput/drawinvoice.git
 RUN pip install git+https://github.com/temaput/tarifcalc.git
 ADD ./practica /code/
+EXPOSE 8000
+CMD gunicorn --workers=4 --bind=0.0.0.0:8000 practica.wsgi 
