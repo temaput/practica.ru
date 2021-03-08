@@ -1,4 +1,4 @@
-version: "3.5"
+version: "3.7"
 
 services:
     traefik:
@@ -15,7 +15,7 @@ services:
         - "--certificatesresolvers.myresolver.acme.email=ap@ucoders.dev"
         - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
         ports:
-        - "8000:443"
+        - "8001:443"
         volumes:
         - "/var/run/docker.sock:/var/run/docker.sock:ro"
         - "letsencrypt:/letsencrypt"
@@ -42,20 +42,13 @@ services:
         - cache:redis
       volumes:
         - data:/data
-      environment:
-        DJANGO_SECRET_KEY:
-        PRACTICA_ROBOKASSA_PASSWORD1:
-        PRACTICA_ROBOKASSA_PASSWORD2:
-        PRACTICA_GOOGLE_ANALYTICS_ID:
-        PRACTICA_YANDEX_METRIKA_ID:
-        PRACTICA_EMAIL:
-        PRACTICA_EMAIL_PASSWORD:
-        DJANGO_SETTINGS_MODULE: practica.settings.testing
+      env_file:
+        - .env
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.api.rule=Host(`practica.ru`)"
-        - "traefik.http.routers.api.entrypoints=websecure"
-        - "traefik.http.routers.static.tls.certresolver=myresolver"
+        - "traefik.http.routers.web.rule=Host(`practica.ru`)"
+        - "traefik.http.routers.web.entrypoints=websecure"
+        - "traefik.http.routers.web.tls.certresolver=myresolver"
 volumes:
   data:
   letsencrypt:

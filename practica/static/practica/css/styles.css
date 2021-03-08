@@ -276,7 +276,7 @@ button.big.active,
 .button.big.active,
 button.big.inactive,
 .button.big.inactive {
-  font: 29px CirceWeb-ExtraBold, Verdana, Arial, sans;
+  font: 24px CirceWeb-ExtraBold, Verdana, Arial, sans;
   color: white;
   min-height: 36px;
   display: inline-block;
@@ -427,7 +427,7 @@ ul {
   color: #23b7eb;
 }
 .label-big .price-amount {
-  font-size: 29px;
+  font-size: 28px;
 }
 .indented {
   margin-left: 210px;
