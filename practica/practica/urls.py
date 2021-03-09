@@ -28,7 +28,7 @@ urlpatterns = patterns('',
     # url(r'^granatshop/', include('granatshop.foo.urls')),
 
     # Robokassa integration...
-    # (r'^checkout/robokassa/', include('robokassa.urls')),
+    (r'^checkout/robokassa/', include('robokassa.urls')),
 
     # sitemap.xml
     (r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),

@@ -25,6 +25,7 @@ from oscar.apps.checkout.views import PaymentDetailsView \
 from oscar.apps.checkout.views import ThankYouView as coreThankYouView
 
 from apps.shipping import models as shipping_models_module
+import robokassa
 
 RedirectRequired, UnableToTakePayment, PaymentError = get_classes(
     'payment.exceptions', ['RedirectRequired', 'UnableToTakePayment',

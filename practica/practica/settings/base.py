@@ -14,7 +14,10 @@ def get_env(name, fallback='not set'):
             import local_settings
             return getattr(local_settings, name)
         except (ImportError, AttributeError):
-            return fallback
+            if fallback is not None:
+                return fallback
+            else:
+                raise ImproperlyConfigured("%s env var not set" % name)
 
 PROJECTPATH =  realpath(join(dirname(__file__), pardir, pardir))
 root = lambda x: join(PROJECTPATH, x)
@@ -88,8 +91,13 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 
 SECRET_KEY = get_env('DJANGO_SECRET_KEY', 'not set')
-ROBOKASSA_PASSWORD1 = get_env('PRACTICA_ROBOKASSA_PASSWORD1')
-ROBOKASSA_PASSWORD2 = get_env('PRACTICA_ROBOKASSA_PASSWORD2')
+
+# ==============
+# Robokassa settings
+# ==============
+ROBOKASSA_LOGIN = get_env("PRACTICA_ROBOKASSA_LOGIN", None)
+ROBOKASSA_PASSWORD1 = get_env('PRACTICA_ROBOKASSA_PASSWORD1', None)
+ROBOKASSA_PASSWORD2 = get_env('PRACTICA_ROBOKASSA_PASSWORD2', None)
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -180,7 +188,7 @@ INSTALLED_APPS = [
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'haystack',
-    # 'robokassa',
+    'robokassa',
     'practica_templatetags',
 ] + get_core_apps(['apps.promotions', 'apps.basket', 'apps.checkout',
                    'apps.catalogue', 'apps.shipping', 'apps.payment',
@@ -202,3 +210,6 @@ from practica.requisites import REQUISITES
 # from practica.robokassa_settings import *
 from practica.practica_settings import *
 from practica.tarifcalc_settings import *
+
+
+

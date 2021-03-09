@@ -84,7 +84,7 @@ class CategoryTreeNode(template.Node):
         annotated_categories = []
 
         start_depth, prev_depth = (None, None)
-        if parent:
+        if parent and hasattr(parent, 'get_descendants'):
             categories = parent.get_descendants()
             if max_depth is not None:
                 max_depth += parent.get_depth()

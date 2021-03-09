@@ -39,6 +39,9 @@ Pygments = "==2.0.2"
 South = "*"
 Unidecode = "==0.04.16"
 Whoosh = "==2.6.0"
+drawinvoice = {ref = "master", git = "https://github.com/temaput/drawinvoice.git"}
+tarifcalc = {ref = "master", git = "https://github.com/temaput/tarifcalc.git"}
+robokassa = {ref = "master", git = "https://github.com/temaput/django-oscar-robokassa.git"}
 
 [dev-packages]
 
