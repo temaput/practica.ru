@@ -4,6 +4,9 @@ services:
         restart: always
     static:
         restart: always
+        ports:
+            - "80:80"
+            - "443:443"
     web:
         command: gunicorn --workers=4 --bind=0.0.0.0:8000 practica.wsgi 
         restart: always

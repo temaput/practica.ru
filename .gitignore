@@ -4,6 +4,7 @@
 
 # Custom
 
+__local__/
 transfer/
 _locale/
 /practica/staticfiles/
