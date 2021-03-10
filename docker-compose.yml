@@ -11,11 +11,11 @@ services:
         - "--providers.docker.exposedbydefault=false"
         - "--entrypoints.websecure.address=:443"
         - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-        - "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+        # - "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
         - "--certificatesresolvers.myresolver.acme.email=ap@ucoders.dev"
         - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
         ports:
-        - "8001:443"
+        - "443:443"
         volumes:
         - "/var/run/docker.sock:/var/run/docker.sock:ro"
         - "letsencrypt:/letsencrypt"
@@ -51,4 +51,6 @@ services:
         - "traefik.http.routers.web.tls.certresolver=myresolver"
 volumes:
   data:
+      external:
+            name: practica
   letsencrypt:
