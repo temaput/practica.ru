@@ -10,14 +10,10 @@ def get_env(name, fallback='not set'):
     try:
         return os.environ[name]
     except KeyError:
-        try:
-            import local_settings
-            return getattr(local_settings, name)
-        except (ImportError, AttributeError):
-            if fallback is not None:
-                return fallback
-            else:
-                raise ImproperlyConfigured("%s env var not set" % name)
+        if fallback is not None:
+            return fallback
+        else:
+            raise ImproperlyConfigured("%s env var not set" % name)
 
 PROJECTPATH =  realpath(join(dirname(__file__), pardir, pardir))
 root = lambda x: join(PROJECTPATH, x)
@@ -77,6 +73,16 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 )
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'django_practica',                      # Or path to database file if using sqlite3.
+        'USER': 'tema',                      # Not used with sqlite3.
+        'PASSWORD': '1770Beethoven',                  # Not used with sqlite3.
+        'HOST': 'db',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': 5432,                      # Set to empty string for default. Not used with sqlite3.
+    }
+}
 
 
 # List of finder classes that know how to find static files in
@@ -98,6 +104,7 @@ SECRET_KEY = get_env('DJANGO_SECRET_KEY', 'not set')
 ROBOKASSA_LOGIN = get_env("PRACTICA_ROBOKASSA_LOGIN", None)
 ROBOKASSA_PASSWORD1 = get_env('PRACTICA_ROBOKASSA_PASSWORD1', None)
 ROBOKASSA_PASSWORD2 = get_env('PRACTICA_ROBOKASSA_PASSWORD2', None)
+ROBOKASSA_TEST_MODE = get_env('PRACTICA_ROBOKASSA_TEST_MODE', False)
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (

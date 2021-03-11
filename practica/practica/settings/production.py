@@ -4,17 +4,6 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'django_practica',                      # Or path to database file if using sqlite3.
-        'USER': 'tema',                      # Not used with sqlite3.
-        'PASSWORD': '1770Beethoven',                  # Not used with sqlite3.
-        'HOST': 'db',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': 5432,                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
-
 # STATIC_ROOT is to collect static offline in deploy
 STATIC_ROOT = '/data/STATIC_ROOT'
 
@@ -60,8 +49,7 @@ CACHES = {
 # CACHE_MIDDLEWARE_SECONDS = 600  # default
 
 # use redis for sessions
-SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-SESSION_CACHE_ALIAS = "default"
+SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 
 
 # use redis for thumbnail lookup (sorl)
@@ -83,7 +71,6 @@ SERVER_EMAIL = EMAIL_HOST_USER
 ERROR_TEST = False  #this should be false after succesfull testing
 
 
-ROBOKASSA_TEST_MODE = True
 # Logging
 # =======
 

@@ -3,16 +3,6 @@ from .base import *
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'django_practica',                      # Or path to database file if using sqlite3.
-        'USER': 'tema',                      # Not used with sqlite3.
-        'PASSWORD': '1770Beethoven',                  # Not used with sqlite3.
-        'HOST': 'db',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': 5432,                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 MEDIA_ROOT = root('media')
@@ -33,7 +23,6 @@ YANDEX_METRIKA_ID = get_env('PRACTICA_YANDEX_METRIKA_ID')
 # =======
 
 ERROR_TEST = True  #this should be false after succesfull testing
-ROBOKASSA_TEST_MODE = True
 COMPRESS_ROOT = root('staticfiles')
 
 LOG_ROOT = root('logs')
