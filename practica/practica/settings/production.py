@@ -176,7 +176,7 @@ LOGGING = {
             'level': 'DEBUG',
         },
         'robokassa': {
-            'handlers': ['null'],
+            'handlers': ['console'],
             'propagate': False,
             'level': 'INFO'
             },

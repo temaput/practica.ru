@@ -8,10 +8,8 @@ services:
             - "80:80"
             - "443:443"
     web:
-        command: gunicorn --workers=4 --bind=0.0.0.0:8000 practica.wsgi 
+        command: gunicorn --workers=4 --log-level=debug --bind=0.0.0.0:8000 practica.wsgi 
         restart: always
-        environment:
-            DJANGO_SETTINGS_MODULE: practica.settings.production
 
     cache:
         restart: always

@@ -5,10 +5,10 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(practica.ucoders.dev)
+domains=(practica.ru)
 rsa_key_size=4096
 data_path="./__local__/certbot"
-email="" # Adding a valid address is strongly recommended
+email="ap@ucoders.dev" # Adding a valid address is strongly recommended
 staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
 
 if [ -d "$data_path" ]; then
