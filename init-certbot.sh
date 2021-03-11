@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(practica.ru www.practica.ru)
+domains=(practica.ucoders.dev)
 rsa_key_size=4096
 data_path="./__local__/certbot"
 email="" # Adding a valid address is strongly recommended
@@ -73,7 +73,6 @@ docker-compose run --rm --entrypoint "\
     $domain_args \
     --rsa-key-size $rsa_key_size \
     --agree-tos \
-    --dry-run \
     --force-renewal" certbot
 echo
 
