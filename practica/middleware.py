@@ -14,8 +14,6 @@ import json
 
 class AjaxMessaging(object):
     def process_response(self, request, response):
-        for message in messages.get_messages(request):
-            log.debug(message)
         if request.is_ajax():
             if response['Content-Type'] in ["application/javascript",
                                             "application/json"]:
