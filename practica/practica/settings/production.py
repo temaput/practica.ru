@@ -112,26 +112,30 @@ LOGGING = {
         },
         'checkout_file': {  # all oscar logs printed to LOG_ROOT/filename
             'level': 'INFO',
-            'class': 'oscar.core.logging.handlers.EnvFileHandler',
-            'filename': 'checkout.log',
+            'class': 'logging.StreamHandler',
+            # 'class': 'oscar.core.logging.handlers.EnvFileHandler',
+            # 'filename': 'checkout.log',
             'formatter': 'verbose'
         },
         'gateway_file': {
             'level': 'INFO',
-            'class': 'oscar.core.logging.handlers.EnvFileHandler',
-            'filename': 'gateway.log',
+            'class': 'logging.StreamHandler',
+            # 'class': 'oscar.core.logging.handlers.EnvFileHandler',
+            # 'filename': 'gateway.log',
             'formatter': 'simple'
         },
         'error_file': {
             'level': 'INFO',
-            'class': 'oscar.core.logging.handlers.EnvFileHandler',
-            'filename': 'errors.log',
+            'class': 'logging.StreamHandler',
+            # 'class': 'oscar.core.logging.handlers.EnvFileHandler',
+            # 'filename': 'errors.log',
             'formatter': 'verbose'
         },
         'sorl_file': {
             'level': 'INFO',
-            'class': 'oscar.core.logging.handlers.EnvFileHandler',
-            'filename': 'sorl.log',
+            'class': 'logging.StreamHandler',
+            # 'class': 'oscar.core.logging.handlers.EnvFileHandler',
+            # 'filename': 'sorl.log',
             'formatter': 'verbose'
         },
         'mail_admins': {  # this is for mailing admins in case of any ERROR
@@ -160,6 +164,11 @@ LOGGING = {
             'propagate': True,
             'level': 'INFO',
         },
+        'robokassa': {
+            'handlers': ['checkout_file'],
+            'propagate': True,
+            'level': 'INFO',
+        },
         'gateway': {
             'handlers': ['gateway_file'],
             'propagate': True,
@@ -170,30 +179,10 @@ LOGGING = {
             'propagate': True,
             'level': 'INFO',
         },
-        'django.db.backends': {
-            'handlers': ['null'],
-            'propagate': False,
-            'level': 'DEBUG',
-        },
-        'robokassa': {
-            'handlers': ['console'],
-            'propagate': False,
-            'level': 'INFO'
-            },
-        'tarifcalc': {
-            'handlers': ['null'],
-            'propagate': False,
-            'level': 'INFO'
-            },
         'checkout.receivers': {
             'handlers': ['checkout_file'],
             'propagate': False,
             'level': 'INFO'
-            },
-        'catalogue': {
-            'handlers': ['null'],
-            'propagate': False,
-            'level': 'ERROR'
             },
         # suppress output of this debug toolbar panel
         'template_timings_panel': {  # this has something to do with django debug panel
