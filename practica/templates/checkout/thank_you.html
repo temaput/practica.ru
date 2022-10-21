@@ -13,8 +13,8 @@
     <div class="cart-controls">
         <div class="cart-controls-bar">
             <h2>Спасибо, Ваш заказ принят.<br>
-                Наш менеджер в  ближайшее время<br>
-                свяжется с Вами</h2>
+		Ожидайте информацию по <br>
+                электронной почте</h2>
             <p></p>
             {% if order.sources.all.0.source_type.name == "По квитанции" %}
                 <a class="blue" href="{% url 'invoice:sbrf_slip' order.pk %}?hash={{ order.verification_hash }}">
