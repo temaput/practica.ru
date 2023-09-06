@@ -5,6 +5,8 @@ from __future__ import division
 from __future__ import unicode_literals
 
 from logging import getLogger
+import json
+
 log = getLogger("checkout.views")
 
 #from django.contrib import messages
@@ -17,7 +19,6 @@ from django.views.generic import TemplateView
 from oscar.core.loading import get_class, get_classes
 from oscar.core.compat import get_user_model
 
-
 from oscar.apps.checkout import views as core_views
 from oscar.apps.checkout.views import PaymentDetailsView \
     as corePaymentDetailsView
@@ -28,8 +29,8 @@ from apps.shipping import models as shipping_models_module
 import robokassa
 
 RedirectRequired, UnableToTakePayment, PaymentError = get_classes(
-    'payment.exceptions', ['RedirectRequired', 'UnableToTakePayment',
-                           'PaymentError'])
+    'payment.exceptions',
+    ['RedirectRequired', 'UnableToTakePayment', 'PaymentError'])
 
 Dispatcher = get_class('customer.utils', 'Dispatcher')
 CommunicationEventType = get_model('customer', 'CommunicationEventType')
@@ -42,7 +43,7 @@ Repository = get_class('shipping.repository', 'Repository')
 # defered payment codes - коды офлайновых способов оплаты,
 # нал, через банк, по счету
 DeferedPaymentCodes = ('cash_payment', 'sbrf_slip', 'invoice_payment')
-RedirectPaymentCodes = ('robokassa',)
+RedirectPaymentCodes = ('robokassa', )
 RemotePaymentCodes = ('sbrf_slip', 'invoice_payment', 'robokassa')
 
 shipping_models = get_models(shipping_models_module)
@@ -83,8 +84,7 @@ class IndexView(CheckoutSessionMixin, TemplateView):
 
 
 class ShippingAddressView(core_views.ShippingAddressView):
-    pre_conditions = ('check_basket_is_not_empty',
-                      'check_basket_is_valid',
+    pre_conditions = ('check_basket_is_not_empty', 'check_basket_is_valid',
                       'check_basket_requires_shipping')
 
     def get_form_kwargs(self):
@@ -98,8 +98,8 @@ class ShippingAddressView(core_views.ShippingAddressView):
             shipping_method = get_shipping_method(
                 self.checkout_session.shipping_method_code(
                     self.request.basket))
-            for fname in ('line4', 'line1', 'line2', 'line3',
-                          'postcode', 'country'):
+            for fname in ('line4', 'line1', 'line2', 'line3', 'postcode',
+                          'country'):
                 if getattr(shipping_method, fname, None):
                     exclude_fields.append(fname)
 
@@ -109,8 +109,8 @@ class ShippingAddressView(core_views.ShippingAddressView):
 
     def get_initial(self):
         initial = {}
-        initial.update(
-            self.checkout_session.new_shipping_address_fields() or {})
+        initial.update(self.checkout_session.new_shipping_address_fields()
+                       or {})
         if 'postcode' in initial:
             if initial['postcode'] == '000000':
                 initial['postcode'] = ''
@@ -128,9 +128,9 @@ class ShippingAddressView(core_views.ShippingAddressView):
             email = form.cleaned_data.get('username', None)
             if email is not None:
                 self.checkout_session.set_guest_email(email)
-        address_fields = dict(
-            (k, v) for (k, v) in form.instance.__dict__.items()
-            if not k.startswith('_'))
+        address_fields = dict((k, v)
+                              for (k, v) in form.instance.__dict__.items()
+                              if not k.startswith('_'))
         log.debug("address_fields is %s", address_fields)
         # Lets check for preliminary filled address fields
         if self.checkout_session.is_shipping_method_set(self.request.basket):
@@ -179,7 +179,8 @@ class ShippingMethodView(core_views.ShippingMethodView):
                 self.request.basket)
 
         return Repository().get_shipping_methods(
-            user=self.request.user, basket=self.request.basket,
+            user=self.request.user,
+            basket=self.request.basket,
             shipping_addr=self.get_shipping_address(self.request.basket),
             request=self.request,
             preliminary_code=preliminary_code)
@@ -187,19 +188,18 @@ class ShippingMethodView(core_views.ShippingMethodView):
 
 class PaymentMethodView(CheckoutSessionMixin, TemplateView):
     template_name = 'checkout/payment_methods.html'
-    pre_conditions = (
-        'check_basket_is_not_empty',
-        'check_basket_is_valid',
-        'check_user_email_is_captured',
-        'check_shipping_data_is_captured')
+    pre_conditions = ('check_basket_is_not_empty', 'check_basket_is_valid',
+                      'check_user_email_is_captured',
+                      'check_shipping_data_is_captured')
 
     def post(self, request, *args, **kwargs):
         method_code = request.POST.get('method_code', None)
 
         # Check the validity of method
         log.debug("Payment method code = %s", method_code)
-        if method_code in [m.code for m in
-                           self.get_available_payment_methods()]:
+        if method_code in [
+                m.code for m in self.get_available_payment_methods()
+        ]:
             self.checkout_session.pay_by(method_code)
 
         return self.get_success_response()
@@ -209,8 +209,8 @@ class PaymentMethodView(CheckoutSessionMixin, TemplateView):
         source_types = SourceType.objects.all()
         shipping_method = self.get_shipping_method(self.request.basket)
         log.debug("Shipping method is %s", shipping_method)
-        allowed_methods = getattr(shipping_method,
-                                  'payment_methods_allowed', source_types)
+        allowed_methods = getattr(shipping_method, 'payment_methods_allowed',
+                                  source_types)
         return allowed_methods
 
     def get_context_data(self, **kwargs):
@@ -225,6 +225,56 @@ class PaymentMethodView(CheckoutSessionMixin, TemplateView):
 
 class PaymentDetailsView(corePaymentDetailsView):
 
+    def create_receipt(self, basket):
+        """
+        https://docs.robokassa.ru/fiscalization
+        Describes new policy of fiscalization. There should be a new parameter: Receipt
+        It should be a json with the following fields:
+                  
+        {
+          "sno":"osn",
+          "items": [
+            {
+              "name": "Название товара 1",
+              "quantity": 1,
+              "sum": 100,
+              "payment_method": "full_payment",
+              "payment_object": "commodity",
+              "tax": "vat10"
+            },
+            {
+              "name": "Название товара 2",
+              "quantity": 3,
+              "sum": 450,
+              "cost": 150,			  
+              "payment_method": "full_prepayment",
+              "payment_object": "service",
+              "nomenclature_code": "04620034587217"
+            }
+          ]
+        }
+
+        Значение параметра Receipt перед использованием в строке для подсчета контрольной суммы и отправкой его формой необходимо URL-кодировать.
+        """
+
+        # TODO: make it configurable
+        tax = "vat10"
+        payment_method = "full_payment",
+        payment_object = "commodity",
+
+        items = [
+            dict(
+                name=item.product.title,
+                quantity=item.quantity,
+                sum=item.line_price_incl_tax,
+                tax=tax,
+                payment_method=payment_method,
+                payment_object=payment_object,
+                nomenclature_code=item.product.upc,
+            ) for item in basket.lines.all()
+        ]
+        return json.dumps({"items": items})
+
     def get_context_data(self, **kwargs):
         ctx = super(PaymentDetailsView, self).get_context_data(**kwargs)
         ctx['payment_method'] = self.checkout_session.payment_method()
@@ -232,12 +282,14 @@ class PaymentDetailsView(corePaymentDetailsView):
         return ctx
 
     def handle_payment(self, order_number, total, **kwargs):
+        """
+        """
         source_type = self.checkout_session.payment_method()
         log.debug("source_type code is %s", source_type.code)
         if not source_type.is_defered:
             log.debug("Not deferred")
             # here we parse the actual online payment
-            if source_type.code in ("robokassa",):
+            if source_type.code in ("robokassa", ):
                 log.debug("Is robokassa")
                 # we need to pass basket number and amount
                 basket_num = self.checkout_session.get_submitted_basket_id()
@@ -247,9 +299,13 @@ class PaymentDetailsView(corePaymentDetailsView):
                     self.checkout_session.get_guest_email()
                 try:
                     from robokassa.facade import robokassa_redirect
-                    robokassa_redirect(
-                        self.request, basket_num, total.incl_tax,
-                        Email=email, Culture='ru', order_num=order_number)
+                    robokassa_redirect(self.request,
+                                       basket_num,
+                                       total.incl_tax,
+                                       self.create_receipt(self.request.basket),
+                                       Email=email,
+                                       Culture='ru',
+                                       order_num=order_number)
                 except ImportError:
                     pass
             raise UnableToTakePayment(u"Данный вид платежа не поддерживается")
@@ -263,8 +319,7 @@ class PaymentDetailsView(corePaymentDetailsView):
         self.add_payment_source(source)
 
         # Also record payment event
-        self.add_payment_event(
-            'pre-auth', total.incl_tax, reference='')
+        self.add_payment_event('pre-auth', total.incl_tax, reference='')
 
 
 class ThankYouView(coreThankYouView):
