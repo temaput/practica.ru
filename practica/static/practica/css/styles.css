@@ -1,28 +1,44 @@
 @font-face {
-  font-family: 'CirceWeb-Regular';
-  src: url('/static/practica/fonts/CRC55__W.eot');
-  src: url('/static/practica/fonts/CRC55__W.eot?#iefix') format('embedded-opentype'), url('/static/practica/fonts/CRC55__W.woff') format('woff'), url('/static/practica/fonts/CRC55__W.ttf') format('truetype'), url('/static/practica/fonts/CRC55__W.svg#CirceWeb-Regular') format('svg');
+  font-family: "CirceWeb-Regular";
+  src: url("/static/practica/fonts/CRC55__W.eot");
+  src: url("/static/practica/fonts/CRC55__W.eot?#iefix")
+      format("embedded-opentype"),
+    url("/static/practica/fonts/CRC55__W.woff") format("woff"),
+    url("/static/practica/fonts/CRC55__W.ttf") format("truetype"),
+    url("/static/practica/fonts/CRC55__W.svg#CirceWeb-Regular") format("svg");
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
-  font-family: 'CirceWeb-Light';
-  src: url('/static/practica/fonts/CRC35__W.eot');
-  src: url('/static/practica/fonts/CRC35__W.eot?#iefix') format('embedded-opentype'), url('/static/practica/fonts/CRC35__W.woff') format('woff'), url('/static/practica/fonts/CRC35__W.ttf') format('truetype'), url('/static/practica/fonts/CRC35__W.svg#CirceWeb-Regular') format('svg');
+  font-family: "CirceWeb-Light";
+  src: url("/static/practica/fonts/CRC35__W.eot");
+  src: url("/static/practica/fonts/CRC35__W.eot?#iefix")
+      format("embedded-opentype"),
+    url("/static/practica/fonts/CRC35__W.woff") format("woff"),
+    url("/static/practica/fonts/CRC35__W.ttf") format("truetype"),
+    url("/static/practica/fonts/CRC35__W.svg#CirceWeb-Regular") format("svg");
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
-  font-family: 'CirceWeb-Bold';
-  src: url('/static/practica/fonts/CRC65__W.eot');
-  src: url('/static/practica/fonts/CRC65__W.eot?#iefix') format('embedded-opentype'), url('/static/practica/fonts/CRC65__W.woff') format('woff'), url('/static/practica/fonts/CRC65__W.ttf') format('truetype'), url('/static/practica/fonts/CRC65__W.svg#CirceWeb-Regular') format('svg');
+  font-family: "CirceWeb-Bold";
+  src: url("/static/practica/fonts/CRC65__W.eot");
+  src: url("/static/practica/fonts/CRC65__W.eot?#iefix")
+      format("embedded-opentype"),
+    url("/static/practica/fonts/CRC65__W.woff") format("woff"),
+    url("/static/practica/fonts/CRC65__W.ttf") format("truetype"),
+    url("/static/practica/fonts/CRC65__W.svg#CirceWeb-Regular") format("svg");
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
-  font-family: 'CirceWeb-ExtraBold';
-  src: url('/static/practica/fonts/CRC75__W.eot');
-  src: url('/static/practica/fonts/CRC75__W.eot?#iefix') format('embedded-opentype'), url('/static/practica/fonts/CRC75__W.woff') format('woff'), url('/static/practica/fonts/CRC75__W.ttf') format('truetype'), url('/static/practica/fonts/CRC75__W.svg#CirceWeb-Regular') format('svg');
+  font-family: "CirceWeb-ExtraBold";
+  src: url("/static/practica/fonts/CRC75__W.eot");
+  src: url("/static/practica/fonts/CRC75__W.eot?#iefix")
+      format("embedded-opentype"),
+    url("/static/practica/fonts/CRC75__W.woff") format("woff"),
+    url("/static/practica/fonts/CRC75__W.ttf") format("truetype"),
+    url("/static/practica/fonts/CRC75__W.svg#CirceWeb-Regular") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -244,7 +260,7 @@ h1 .text {
   min-height: 36px;
   font: 29px CirceWeb-ExtraBold, Verdana, Arial, sans;
   color: white;
-  padding: 0 15px 5px ;
+  padding: 0 15px 5px;
   text-transform: lowercase;
 }
 h1 .text.blue {
@@ -282,7 +298,7 @@ button.big.inactive,
   display: inline-block;
   background: #23b7eb;
   box-sizing: content-box;
-  padding: 4px 15px 5px ;
+  padding: 4px 15px 5px;
 }
 button.big.inactive,
 .button.big.inactive {
@@ -620,7 +636,7 @@ Main page styles
 }
 .sub li.sub__search {
   width: 149px;
-  margin: 1.1em  0 1.4em 5%;
+  margin: 1.1em 0 1.4em 5%;
 }
 .sub li.sub__search .search__submit {
   border: none;
@@ -1537,4 +1553,22 @@ form.register-form button {
 }
 .flatpage a {
   color: #ff5a56;
+}
+
+.min-height-100 {
+  /* full screen - footer - body-padding */
+  min-height: calc(100vh - 43px - 32px);
+  display: flex;
+  flex-direction: column;
+}
+
+.text-center {
+  text-align: center;
+}
+.full-screen-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex-grow: 1;
 }

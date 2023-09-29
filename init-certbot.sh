@@ -5,10 +5,18 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(practica.ru)
+# Check if two arguments are provided
+if [ "$#" -ne 2 ]; then
+    echo "Error: You must provide exactly two arguments: domain and email."
+    exit 1
+fi
+
+domain="$1"
+email="$2"
+
+domains=($domain)
 rsa_key_size=4096
 data_path="./__local__/certbot"
-email="ap@ucoders.dev" # Adding a valid address is strongly recommended
 staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
 
 if [ -d "$data_path" ]; then
