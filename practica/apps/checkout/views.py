@@ -258,22 +258,23 @@ class PaymentDetailsView(corePaymentDetailsView):
         """
 
         # TODO: make it configurable
-        tax = "vat10"
+        tax = "none"
         payment_method = "full_payment",
         payment_object = "commodity",
 
         items = [
             dict(
-                name=item.product.title,
-                quantity=item.quantity,
-                sum=item.line_price_incl_tax,
-                tax=tax,
+                name=line.product.title,
+                quantity=line.quantity,
+                sum=line.line_price_incl_tax,
+                tax=line.line_tax,
                 payment_method=payment_method,
                 payment_object=payment_object,
-                nomenclature_code=item.product.upc,
-            ) for item in basket.lines.all()
+                nomenclature_code=line.product.upc,
+            ) for line in basket.lines.all()
         ]
-        return json.dumps({"items": items})
+
+        return {"items": items}
 
     def get_context_data(self, **kwargs):
         ctx = super(PaymentDetailsView, self).get_context_data(**kwargs)
