@@ -1,0 +1,49 @@
+{% extends "layout.html" %} {% load i18n %} 
+{% load staticfiles %}
+
+
+{% block title %} Перенаправление на сервис оплаты {% endblock %} 
+
+
+{% block layout %}
+<div class="min-height-100">
+
+    <div class="full-screen-center">
+    <h1 style="margin: 0;" class="text-center">Ожидайте, идет перенаправление на платежный сервис</h1>
+
+        <p style="margin-bottom: 40px;">
+        Вы будете перенаправлены на страницу платежного сервиса. Если перенаправление
+        не произошло автоматически, пожалуйста, нажмите на кнопку ниже.
+        </p>
+        <form action="{{ form_action }}" id="robokassa-redirect-form" method="POST">
+        {{ form.as_p }}
+        <button class="big active" type="submit">
+            Перейти к оплате
+        </button>
+        </form>
+    </div>
+</div>
+
+</div>
+    {% include "partials/footer.html" %}
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+  (function () {
+    function ready(fn) {
+      if (document.readyState !== "loading") {
+        fn();
+      } else {
+        document.addEventListener("DOMContentLoaded", fn);
+      }
+    }
+    function redirect() {
+      document.getElementById("robokassa-redirect-form").submit();
+    }
+
+    ready(redirect);
+  })();
+</script>
+{% endblock %}
