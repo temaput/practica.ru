@@ -1137,72 +1137,56 @@ Main page styles
   margin: 0;
   display: block;
 }
+
 .main_footer {
   border-top: 1px solid #414042;
-  max-width: 1260px;
+  padding: 16px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.main_footer:before,
-.main_footer:after {
-  content: "";
-  display: table;
+.main_footer .link {
+  color: #23b7eb;
+  /* color: #58B4E6; */
+  font-size: 10px;
+  font-weight: 700;
+  font-family:  CirceWeb-Bold, Verdana, Arial, sans;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
-.main_footer:after {
-  clear: both;
-}
-.main_footer a {
+.main_footer .btn {
+  display: flex;
+  padding: 8px 12px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  background: rgba(88, 180, 230, 0.2);
   color: #414042;
-  text-decoration: none;
-  padding-bottom: 2px;
-  vertical-align: -2px;
+  font-size: 10px;
+  font-weight: 700;
+  gap: 6px;
 }
-.main_footer a .text {
-  border-bottom: #414042 1px solid;
+.main_footer .btn:hover {
+  background: rgba(88, 180, 230, 0.4);
 }
-.main_footer div {
-  float: left;
-  vertical-align: top;
+.main_footer .btn__icon {
+  display: flex;
 }
-.main_footer div.right-align {
-  float: right;
+.main_footer .legal {
+  color: #414042;
+  font-size: 10px;
+  font-weight: 400;
 }
-.main_footer div.career a {
-  font: 12px CirceWeb-Regular, Arial, sans;
+
+.main_footer .contacts {
+  display: flex;
+  gap: 10px;
 }
-.main_footer div.career .icon {
-  margin-top: 2px;
+.main_footer .career {
+  display: flex;
+  gap: 16px;
 }
-.main_footer div.career__translate {
-  margin-left: 15px;
-}
-.main_footer div.phone-number {
-  text-align: right;
-  padding-top: 5px;
-}
-.main_footer div.phone-number span {
-  color: #ff5a56;
-  font: 25px CirceWeb-Light, Verdana, Arial, sans;
-}
-.main_footer div.mailto {
-  margin-left: 1.5em;
-}
-.main_footer div.mailto a {
-  border-bottom: 1px solid #ff5a56;
-  font: 12px/15px CirceWeb-Bold, Verdana, Arial, sans;
-}
-.main_footer div.copy {
-  text-align: right;
-  width: 299px;
-}
-.main_footer div.copy span {
-  font: 10px/15px CirceWeb-Regular, Arial, sans;
-}
-.main_footer div.copy .copy__year {
-  font: CirceWeb-Light, Verdana, Arial, sans;
-  color: #a0a0a0;
-}
-.main_footer div.copy .copy__sign {
-  vertical-align: 10%;
-}
+
 .cart-grid-small {
   overflow: hidden;
 }
