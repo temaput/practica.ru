@@ -60,8 +60,8 @@ THUMBNAIL_REDIS_HOST = 'redis'
 # EMAILS
 #========
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.go1.unisender.ru'
 EMAIL_HOST_USER = get_env('PRACTICA_EMAIL_USER')
 EMAIL_HOST_PASSWORD = get_env('PRACTICA_EMAIL_PASSWORD')

@@ -1556,3 +1556,38 @@ form.register-form button {
   flex-direction: column;
   flex-grow: 1;
 }
+
+.table-striped tbody tr:nth-child(even) {
+  background-color: #f2f2f2; /* Light grey background */
+}
+
+/* General table styles */
+.table-striped {
+  width: 100%;
+  border-collapse: collapse; /* Collapse borders */
+}
+
+.table-striped th, .table-striped td {
+  text-align: left;
+  padding: 8px; /* Padding for cells */
+}
+
+.table-striped th {
+  background-color: #f9f9f9; /* Slightly different grey for header */
+}
+
+
+.table-bordered {
+    width: 100%;
+    border-collapse: collapse; /* Ensures that borders between cells collapse into a single border */
+}
+
+.table-bordered th, .table-bordered td {
+    border: 1px solid #ddd; /* Light grey border */
+    text-align: left;
+    padding: 8px; /* Padding for cells */
+}
+
+.table-bordered th {
+    background-color: #f9f9f9; /* Light grey background for headers */
+}

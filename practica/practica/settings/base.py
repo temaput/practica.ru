@@ -8,7 +8,16 @@ from django.core.exceptions import ImproperlyConfigured
 
 def get_env(name, fallback='not set'):
     try:
-        return os.environ[name]
+        val = os.environ[name]
+        if val == 'False':
+            return False
+        if val == 'True':
+            return True
+        if val == '0':
+            return 0
+        if val == '1':
+            return 1
+        return val
     except KeyError:
         if fallback is not None:
             return fallback

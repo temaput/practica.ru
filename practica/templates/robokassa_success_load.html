@@ -1,0 +1,77 @@
+{% extends "layout.html" %} {% load i18n %} 
+{% load staticfiles %}
+
+
+{% block title %} Получение данных от платежного сервиса... {% endblock %} 
+
+
+{% block layout %}
+<div class="min-height-100">
+
+    <div class="full-screen-center">
+    <h1 style="margin: 0;" class="text-center">Получение данных от платежного сервиса...</h1>
+
+        <p style="margin-bottom: 40px;">
+        Вы будете перенаправлены на страницу подтверждения заказа в ближайшее время.
+        Если это не произошло автоматически, пожалуйста, нажмите на кнопку ниже.
+        </p>
+        <form id="robokassa-redirect-form" method="POST">
+          <div style="display: none;">
+            {{ form.as_p }}
+          </div>
+        <input hidden name="use_partial" value="true"/>
+        <button class="big active" type="submit">
+            Перейти к подтверждению заказа
+        </button>
+        </form>
+    </div>
+</div>
+
+</div>
+    {% include "partials/footer.html" %}
+
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+  (function () {
+    function ready(fn) {
+      if (document.readyState !== "loading") {
+        fn();
+      } else {
+        document.addEventListener("DOMContentLoaded", fn);
+      }
+    }
+    function redirect() {
+      setInterval(() => {
+        document.getElementById("robokassa-redirect-form").submit();
+      }, 5000)
+    }
+
+    function initializeForm() {
+
+      const form = document.getElementById("robokassa-redirect-form");
+      form.addEventListener('submit', function (e) {
+          e.preventDefault(); // Prevent default form submission
+          
+          const formData = new FormData(form); // Collect form data
+
+          // Fetch API to submit form data without reloading the page
+          fetch(form.action, {
+              method: 'POST',
+              body: formData,
+          })
+          .then(response => {
+            if (response.redirected) {
+                window.location.href = response.url; // Manual redirect
+            } 
+          }) 
+          .catch(error => console.error('Error:', error));
+      });
+    }
+
+    ready(initializeForm)
+    ready(redirect);
+  })();
+</script>
+{% endblock %}
