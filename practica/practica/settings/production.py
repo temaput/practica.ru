@@ -60,14 +60,14 @@ THUMBNAIL_REDIS_HOST = 'redis'
 # EMAILS
 #========
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'apikey'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.go1.unisender.ru'
+EMAIL_HOST_USER = get_env('PRACTICA_EMAIL_USER')
 EMAIL_HOST_PASSWORD = get_env('PRACTICA_EMAIL_PASSWORD')
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-SERVER_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = get_env('PRACTICA_EMAIL')
 ERROR_TEST = False  #this should be false after succesfull testing
 
 
