@@ -3,7 +3,7 @@
 # Meta
 # ====
 
-OSCAR_SHOP_NAME = u'Издательский дом Практика'
+OSCAR_SHOP_NAME = u'Издательский дом «Практика»'
 OSCAR_SHOP_TAGLINE = u'Медицинская литература'
 OSCAR_DEFAULT_CURRENCY = u'руб.' 
 OSCAR_CURRENCY_LOCALE = 'ru_RU'

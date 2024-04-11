@@ -8,7 +8,16 @@ from django.core.exceptions import ImproperlyConfigured
 
 def get_env(name, fallback='not set'):
     try:
-        return os.environ[name]
+        val = os.environ[name]
+        if val == 'False':
+            return False
+        if val == 'True':
+            return True
+        if val == '0':
+            return 0
+        if val == '1':
+            return 1
+        return val
     except KeyError:
         if fallback is not None:
             return fallback
@@ -106,7 +115,7 @@ ROBOKASSA_PASSWORD1 = get_env('PRACTICA_ROBOKASSA_PASSWORD1', None)
 ROBOKASSA_PASSWORD2 = get_env('PRACTICA_ROBOKASSA_PASSWORD2', None)
 ROBOKASSA_TEST_MODE = get_env('PRACTICA_ROBOKASSA_TEST_MODE', False)
 ROBOKASSA_USE_POST = True
-ROBOKASSA_STRICT_CHECK = False
+ROBOKASSA_STRICT_CHECK = get_env('PRACTICA_ROBOKASSA_STRICT_CHECK', False)
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
