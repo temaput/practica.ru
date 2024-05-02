@@ -259,15 +259,15 @@ class PaymentDetailsView(corePaymentDetailsView):
 
         # TODO: make it configurable
         tax = "none"
-        payment_method = "full_payment",
-        payment_object = "commodity",
+        payment_method = "full_payment"
+        payment_object = "commodity"
 
         items = [
             dict(
                 name=line.product.title,
                 quantity=line.quantity,
                 sum=line.line_price_incl_tax,
-                tax=line.line_tax,
+                tax=tax,
                 payment_method=payment_method,
                 payment_object=payment_object,
                 nomenclature_code=line.product.upc,
