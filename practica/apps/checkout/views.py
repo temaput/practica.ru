@@ -7,6 +7,8 @@ from __future__ import unicode_literals
 from logging import getLogger
 import json
 
+from decimal import Decimal as D, localcontext, ROUND_DOWN
+
 log = getLogger("checkout.views")
 
 #from django.contrib import messages
@@ -225,7 +227,7 @@ class PaymentMethodView(CheckoutSessionMixin, TemplateView):
 
 class PaymentDetailsView(corePaymentDetailsView):
 
-    def create_receipt(self, basket):
+    def create_receipt(self, basket, total):
         """
         https://docs.robokassa.ru/fiscalization
         Describes new policy of fiscalization. There should be a new parameter: Receipt
@@ -274,6 +276,17 @@ class PaymentDetailsView(corePaymentDetailsView):
             ) for line in basket.lines.all()
         ]
 
+        if len(items) > 0:
+            with localcontext() as ctx:
+                ctx.rounding = ROUND_DOWN
+                to_add = ((total.incl_tax - sum([item['sum'] for item in items])) / len(items)).quantize(D('0.01'))
+                for item in items:
+                    item['sum'] += to_add
+
+            diff = total.incl_tax - sum([item['sum'] for item in items]) 
+            if diff > 0:
+                items[0]['sum'] += diff
+            
         return {"items": items}
 
     def get_context_data(self, **kwargs):
@@ -303,7 +316,7 @@ class PaymentDetailsView(corePaymentDetailsView):
                     robokassa_redirect(self.request,
                                        basket_num,
                                        total.incl_tax,
-                                       self.create_receipt(self.request.basket),
+                                       self.create_receipt(self.request.basket, total),
                                        Email=email,
                                        Culture='ru',
                                        order_num=order_number)
